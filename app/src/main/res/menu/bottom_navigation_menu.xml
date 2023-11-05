@@ -1,0 +1,30 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/fragment_dashboard"
+        android:enabled="true"
+        android:icon="@drawable/ic_launcher_foreground"
+        android:title="@string/activity_dashboard"/>
+    <item
+        android:id="@+id/fragment_history"
+        android:enabled="true"
+        android:icon="@drawable/ic_launcher_foreground"
+        android:title="@string/activity_history"/>
+
+    <item
+        android:id="@+id/fragment_workout"
+        android:enabled="true"
+        android:icon="@drawable/ic_launcher_foreground"
+        android:title="@string/activity_workout"/>
+
+    <item
+        android:id="@+id/fragment_exercises"
+        android:enabled="true"
+        android:icon="@drawable/ic_launcher_foreground"
+        android:title="@string/activity_exercise"/>
+
+    <item
+        android:id="@+id/fragment_progress"
+        android:enabled="true"
+        android:icon="@drawable/ic_launcher_foreground"
+        android:title="@string/activity_progress"/>
+</menu>
