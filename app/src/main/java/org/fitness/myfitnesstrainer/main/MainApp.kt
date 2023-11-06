@@ -6,6 +6,7 @@ import android.content.Intent
 import androidx.fragment.app.FragmentManager
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import org.fitness.myfitnesstrainer.activities.AddWorkoutActivity
 import org.fitness.myfitnesstrainer.activities.MainActivity
 import org.fitness.myfitnesstrainer.api.RetrofitInstance
@@ -19,13 +20,26 @@ class MainApp : Application() {
     lateinit var profile: Profile
 
 
-    suspend fun refreshProfile() {
-        profile = GlobalScope.async {
-            profile = getProfile()
-            Timber.i("profile %s", profile)
-            return@async profile
-        }.await()
-    }
+    suspend fun refreshProfile() = GlobalScope.async {
+            when (val response = RetrofitInstance.service.getProfile()) {
+                is NetworkResult.Success -> {
+                    Timber.i("Profile Success")
+                    Timber.i(response.data.profile.toString())
+                    profile = Profile(response.data.profile)
+                    Timber.i("App Profile Updated")
+                }
+
+                is NetworkResult.Error -> {
+                    Timber.i("Http Err", response.errorMsg)
+                    throw Exception("Bad Request")
+                }
+
+                is NetworkResult.Exception -> {
+                    Timber.i("Not Connected to Internet")
+                    throw Exception("Unable to connect to server")
+                }
+            }
+        }
 
     fun login() {
         val intent = Intent(this@MainApp, MainActivity::class.java)
@@ -49,24 +63,21 @@ class MainApp : Application() {
     }
 
     suspend fun getProfile(): Profile {
-        val profileDeferred = GlobalScope.async {
-            when (val response = RetrofitInstance.service.getProfile()) {
-                is NetworkResult.Success -> {
-                    Timber.i("Profile Success")
-                    return@async Profile(response.data.profile)
-                }
+        when (val response = RetrofitInstance.service.getProfile()) {
+            is NetworkResult.Success -> {
+                Timber.i("Profile Success")
+                return Profile(response.data.profile)
+            }
 
-                is NetworkResult.Error -> {
-                    Timber.i("Http Err", response.errorMsg)
-                    throw Exception("Bad Request")
-                }
+            is NetworkResult.Error -> {
+                Timber.i("Http Err", response.errorMsg)
+                throw Exception("Bad Request")
+            }
 
-                is NetworkResult.Exception -> {
-                    Timber.i("Not Connected to Internet")
-                    throw Exception("Unable to connect to server")
-                }
+            is NetworkResult.Exception -> {
+                Timber.i("Not Connected to Internet")
+                throw Exception("Unable to connect to server")
             }
         }
-        return profileDeferred.await()
     }
 }

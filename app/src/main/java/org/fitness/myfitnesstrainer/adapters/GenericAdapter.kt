@@ -9,6 +9,7 @@ import androidx.viewbinding.ViewBinding
 
 open class GenericAdapter<T>(data: List<T>) : RecyclerView.Adapter<BaseViewHolder<T>>() {
     var listOfItems = data
+    var removedItems = ArrayList<T>()
 
     open var expressionViewHolderBinding: ((T, ViewBinding) -> Unit)? = null
     open var expressionOnCreateViewHolder:((ViewGroup)-> ViewBinding)? = null
@@ -28,6 +29,16 @@ open class GenericAdapter<T>(data: List<T>) : RecyclerView.Adapter<BaseViewHolde
         newItemList.removeAt(position)
         listOfItems = newItemList
         notifyItemRemoved(position)
+    }
+
+    open fun addItem(position: Int, data: T) {
+        val newItemList = ArrayList<T>()
+        for(item in listOfItems) {
+            newItemList.add(item)
+        }
+        newItemList.add(data)
+        listOfItems = newItemList
+        notifyItemInserted(newItemList.size)
     }
 
     open fun getItem(position: Int): T? {

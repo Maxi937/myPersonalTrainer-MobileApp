@@ -6,6 +6,7 @@ import org.fitness.myfitnesstrainer.api.models.UserDetails
 import org.fitness.myfitnesstrainer.api.models.apiExercise
 import org.fitness.myfitnesstrainer.api.models.apiWorkout
 import org.fitness.myfitnesstrainer.api.models.xProfile
+import timber.log.Timber
 
 @Parcelize
 data class Profile(private val xProfile: xProfile) : Parcelable {
@@ -14,6 +15,11 @@ data class Profile(private val xProfile: xProfile) : Parcelable {
     var fname: String = xProfile.userDetails.fname
     var lname: String = xProfile.userDetails.lname
     var email: String = xProfile.userDetails.email
+
+    init {
+        Timber.i("Initing new profile")
+        Timber.i("%s", xProfile)
+    }
 
     private fun unwrapWorkouts(apiWorkouts: List<apiWorkout>): List<WorkoutModel> {
         var mutWorkouts: MutableList<WorkoutModel> = mutableListOf()

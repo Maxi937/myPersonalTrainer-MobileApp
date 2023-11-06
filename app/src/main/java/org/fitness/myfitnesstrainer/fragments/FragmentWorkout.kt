@@ -67,6 +67,7 @@ class FragmentWorkout : Fragment() {
             view.btnDeleteWorkout.setOnClickListener {
                 lifecycleScope.async {
                     deleteWorkout(workout)
+                    activity.app.refreshProfile().await()
                     mAdapter.deleteItemFromData(workout)
                 }
             }

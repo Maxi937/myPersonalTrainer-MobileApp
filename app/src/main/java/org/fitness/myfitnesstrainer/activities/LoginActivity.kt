@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import org.fitness.myfitnesstrainer.service.NetworkResult
@@ -24,24 +25,21 @@ class LoginActivity : AppCompatActivity() {
         app = application as MainApp
 
         binding = ActivityLoginBinding.inflate(layoutInflater)
+
         binding.btnLogin.setOnClickListener {
-            val profile = lifecycleScope.async {
-                val success = login(binding.inptEmail.text.toString(), binding.inptPassword.text.toString())
+            lifecycleScope.async {
+                val success = login(binding.inptEmail.text.toString(), binding.inptPassword.text.toString()).await()
                 if(success) {
-                    app.refreshProfile()
+                    app.refreshProfile().await()
+                    Timber.i("Finished calling refresh profile")
+                    finish()
                     return@async startMainActivity()
                 }
-                else {
-                    return@async loginFailed()
-                }
+//                else {
+//                    return@async loginFailed()
+//                }
             }
         }
-
-//        binding.btnSignup.setOnClickListener {
-//            GlobalScope.async {
-//                signUp(binding.inptEmail.text.toString(), binding.inptPassword.text.toString())
-//            }
-//        }
 
         setContentView(binding.root)
     }
@@ -51,7 +49,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
 
-    private suspend fun login(email: String, password: String): Boolean {
+    private suspend fun login(email: String, password: String): Deferred<Boolean> {
         val authRequest = AuthRequest(email, password)
         Timber.i("Logging In")
 
@@ -74,7 +72,7 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
         }
-        return loginDeferred.await()
+        return loginDeferred
     }
 
     private fun startMainActivity() {

@@ -5,7 +5,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class WorkoutModel(
-    val name: String,
+    val name: String = "",
     var exercises: List<ExerciseModel> = emptyList()
 ) : Parcelable {
 
