@@ -6,14 +6,19 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.coroutines.async
 import org.fitness.myfitnesstrainer.activities.AddExerciseActivity
 import org.fitness.myfitnesstrainer.activities.AddWorkoutActivity
 import org.fitness.myfitnesstrainer.activities.MainActivity
 import org.fitness.myfitnesstrainer.adapters.GenericAdapter
+import org.fitness.myfitnesstrainer.api.RetrofitInstance
 import org.fitness.myfitnesstrainer.databinding.CardExerciseDetailsBinding
 import org.fitness.myfitnesstrainer.databinding.FragmentExercisesBinding
 import org.fitness.myfitnesstrainer.models.ExerciseModel
+import org.fitness.myfitnesstrainer.service.NetworkResult
+import timber.log.Timber
 
 
 class FragmentExercises : Fragment() {
@@ -44,6 +49,13 @@ class FragmentExercises : Fragment() {
         mAdapter.expressionViewHolderBinding = {exercise, viewBinding->
             var view = viewBinding as CardExerciseDetailsBinding
             view.txtCardExerciseDetailsExerciseName.text = exercise.name
+            view.btnDeleteExercise.visibility = View.VISIBLE
+            view.btnDeleteExercise.setOnClickListener {
+                lifecycleScope.async {
+                    deleteExercise(exercise)
+                    mAdapter.deleteItemFromData(exercise)
+                }
+            }
         }
 
         mAdapter.expressionOnCreateViewHolder = {viewGroup->
@@ -55,6 +67,27 @@ class FragmentExercises : Fragment() {
             adapter = mAdapter
         }
         return mAdapter
+    }
+
+    suspend fun deleteExercise(exercise: ExerciseModel) {
+        Timber.i("Delete Exercise")
+        val successDeferred = lifecycleScope.async {
+            when (val response = RetrofitInstance.service.deleteExercise(exercise)) {
+                is NetworkResult.Success -> {
+                    Timber.i("Delete Exercise Success")
+                }
+
+                is NetworkResult.Error -> {
+                    Timber.i("Delete Exercise Failure")
+                    return@async false
+                }
+
+                is NetworkResult.Exception -> {
+                    Timber.i("%s", response.e)
+                    throw Exception("Ya done son")
+                }
+            }
+        }.await()
     }
 
     companion object {
