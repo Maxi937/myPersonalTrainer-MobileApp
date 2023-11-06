@@ -6,7 +6,8 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class WorkoutModel(
     val name: String = "",
-    var exercises: List<ExerciseModel> = emptyList()
+    var exercises: List<ExerciseModel> = emptyList(),
+    var date: String = ""
 ) : Parcelable {
 
     fun getVolume(): Float {

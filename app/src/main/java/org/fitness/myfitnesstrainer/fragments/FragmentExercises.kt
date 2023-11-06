@@ -17,7 +17,7 @@ import org.fitness.myfitnesstrainer.api.RetrofitInstance
 import org.fitness.myfitnesstrainer.databinding.CardExerciseDetailsBinding
 import org.fitness.myfitnesstrainer.databinding.FragmentExercisesBinding
 import org.fitness.myfitnesstrainer.models.ExerciseModel
-import org.fitness.myfitnesstrainer.service.NetworkResult
+import org.fitness.myfitnesstrainer.api.NetworkResult
 import timber.log.Timber
 
 

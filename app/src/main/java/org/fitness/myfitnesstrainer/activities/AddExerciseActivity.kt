@@ -11,7 +11,7 @@ import org.fitness.myfitnesstrainer.databinding.ActivityAddExerciseBinding
 import org.fitness.myfitnesstrainer.main.MainApp
 import org.fitness.myfitnesstrainer.models.ExerciseModel
 import org.fitness.myfitnesstrainer.models.SetModel
-import org.fitness.myfitnesstrainer.service.NetworkResult
+import org.fitness.myfitnesstrainer.api.NetworkResult
 import timber.log.Timber
 
 class AddExerciseActivity : AppCompatActivity() {

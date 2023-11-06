@@ -1,6 +1,8 @@
 package org.fitness.myfitnesstrainer.service
 
+import org.fitness.myfitnesstrainer.api.ApiHandler
 import org.fitness.myfitnesstrainer.api.ApiServices
+import org.fitness.myfitnesstrainer.api.NetworkResult
 import org.fitness.myfitnesstrainer.api.models.AuthRequest
 import org.fitness.myfitnesstrainer.api.models.Token
 import org.fitness.myfitnesstrainer.api.models.apiExercise
@@ -26,6 +28,8 @@ interface MyFitnessService {
     suspend fun deleteWorkout(workoutModel: WorkoutModel): NetworkResult<apiStatus>
 
     suspend fun deleteExercise(exercise: ExerciseModel): NetworkResult<apiStatus>
+
+    suspend fun addHistory(workout: WorkoutModel): NetworkResult<apiWorkout>
 }
 
 class MyFitnessServiceImp(private val apiServices: ApiServices) : MyFitnessService, ApiHandler {
@@ -42,4 +46,6 @@ class MyFitnessServiceImp(private val apiServices: ApiServices) : MyFitnessServi
     override suspend fun deleteWorkout(workoutModel: WorkoutModel): NetworkResult<apiStatus> = handleApi { apiServices.deleteWorkout(workoutModel) }
 
     override suspend fun deleteExercise(exercise: ExerciseModel): NetworkResult<apiStatus> = handleApi { apiServices.deleteExercise(exercise) }
+
+    override suspend fun addHistory(workout: WorkoutModel): NetworkResult<apiWorkout> = handleApi { apiServices.addHistory(workout) }
 }

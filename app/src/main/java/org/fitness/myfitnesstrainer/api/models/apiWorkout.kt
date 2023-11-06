@@ -11,5 +11,8 @@ data class apiWorkout(
     val createdBy: String,
     val exercises: List<apiExercise>,
     val name: String,
-    val updatedAt: String
+    val updatedAt: String,
+    val history: List<String> = emptyList(),
+    val date: String = ""
+
 ) : Parcelable

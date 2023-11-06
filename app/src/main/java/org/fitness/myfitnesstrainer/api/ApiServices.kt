@@ -8,7 +8,7 @@ import org.fitness.myfitnesstrainer.api.models.apiStatus
 import org.fitness.myfitnesstrainer.api.models.apiWorkout
 import org.fitness.myfitnesstrainer.models.ExerciseModel
 import org.fitness.myfitnesstrainer.models.WorkoutModel
-import org.fitness.myfitnesstrainer.service.NetworkResult
+import org.fitness.myfitnesstrainer.api.NetworkResult
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -36,4 +36,7 @@ interface ApiServices {
     suspend fun deleteWorkout(@Body workout: WorkoutModel): Response<apiStatus>
     @POST("/api/exercises/delete")
     suspend fun deleteExercise(@Body exercise: ExerciseModel): Response<apiStatus>
+
+    @POST("/api/workouts/history")
+    suspend fun addHistory(@Body workout: WorkoutModel): Response<apiWorkout>
 }

@@ -7,5 +7,6 @@ import org.fitness.myfitnesstrainer.models.Profile
 data class xProfile(
     val exercises: List<apiExercise> = emptyList(),
     val workouts: List<apiWorkout> = emptyList(),
+    val history: List<apiWorkout> = emptyList(),
     val userDetails: UserDetails = UserDetails()
 ) : Parcelable

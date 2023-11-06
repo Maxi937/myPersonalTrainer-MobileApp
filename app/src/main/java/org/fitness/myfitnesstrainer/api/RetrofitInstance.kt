@@ -13,6 +13,7 @@ import okhttp3.Response
 import org.fitness.myfitnesstrainer.main.MainApp
 import org.fitness.myfitnesstrainer.service.MyFitnessService
 import org.fitness.myfitnesstrainer.service.MyFitnessServiceImp
+import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import timber.log.Timber
@@ -78,4 +79,36 @@ object RetrofitInstance {
     }
 
     val service: MyFitnessService = MyFitnessServiceImp(api)
+}
+
+sealed class NetworkResult<T : Any> {
+    class Success<T: Any>(val code: Int,val data: T) : NetworkResult<T>()
+    class Error<T: Any>(val code: Int, val errorMsg: String?) : NetworkResult<T>()
+    class Exception<T: Any>(val e: Throwable) : NetworkResult<T>()
+}
+
+interface ApiHandler {
+    suspend fun <T : Any> handleApi(
+        execute: suspend () -> retrofit2.Response<T>
+    ): NetworkResult<T> {
+        return try {
+            val response = execute()
+            //Log.d("response","$response")
+            val body = response.body()
+            //Log.d("response","$body")
+            if (response.isSuccessful && body != null) {
+                NetworkResult.Success(response.code(), body)
+            } else {
+                NetworkResult.Error(
+                    code = response.code(),
+                    errorMsg = response.errorBody().toString()
+                )
+            }
+        }catch (e: HttpException){
+            NetworkResult.Error(e.code(), e.message())
+        }catch (e:Throwable){
+            NetworkResult.Exception(e)
+        }
+
+    }
 }

@@ -9,7 +9,6 @@ import androidx.viewbinding.ViewBinding
 
 open class GenericAdapter<T>(data: List<T>) : RecyclerView.Adapter<BaseViewHolder<T>>() {
     var listOfItems = data
-    var removedItems = ArrayList<T>()
 
     open var expressionViewHolderBinding: ((T, ViewBinding) -> Unit)? = null
     open var expressionOnCreateViewHolder:((ViewGroup)-> ViewBinding)? = null

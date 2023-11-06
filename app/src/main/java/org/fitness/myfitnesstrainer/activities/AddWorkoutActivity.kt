@@ -19,7 +19,7 @@ import org.fitness.myfitnesstrainer.databinding.CardExerciseDetailsBinding
 import org.fitness.myfitnesstrainer.main.MainApp
 import org.fitness.myfitnesstrainer.models.ExerciseModel
 import org.fitness.myfitnesstrainer.models.WorkoutModel
-import org.fitness.myfitnesstrainer.service.NetworkResult
+import org.fitness.myfitnesstrainer.api.NetworkResult
 import timber.log.Timber
 
 class AddWorkoutActivity : AppCompatActivity() {

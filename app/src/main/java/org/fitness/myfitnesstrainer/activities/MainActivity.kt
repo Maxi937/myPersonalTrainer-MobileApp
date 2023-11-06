@@ -44,10 +44,6 @@ class MainActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.top_menu_settings, menu);
         return super.onCreateOptionsMenu(menu)
     }
-
-    fun refresh() {
-        recreate()
-    }
 }
 
 

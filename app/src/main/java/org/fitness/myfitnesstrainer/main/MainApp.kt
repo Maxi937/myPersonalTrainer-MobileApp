@@ -11,7 +11,7 @@ import org.fitness.myfitnesstrainer.activities.AddWorkoutActivity
 import org.fitness.myfitnesstrainer.activities.MainActivity
 import org.fitness.myfitnesstrainer.api.RetrofitInstance
 import org.fitness.myfitnesstrainer.models.Profile
-import org.fitness.myfitnesstrainer.service.NetworkResult
+import org.fitness.myfitnesstrainer.api.NetworkResult
 import timber.log.Timber
 
 
@@ -30,13 +30,13 @@ class MainApp : Application() {
                 }
 
                 is NetworkResult.Error -> {
-                    Timber.i("Http Err", response.errorMsg)
+                    Timber.i("Http Err %s", response.code)
                     throw Exception("Bad Request")
                 }
 
                 is NetworkResult.Exception -> {
                     Timber.i("Not Connected to Internet")
-                    throw Exception("Unable to connect to server")
+                    return@async throw Exception("Unable to connect to server")
                 }
             }
         }

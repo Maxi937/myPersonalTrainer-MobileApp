@@ -9,6 +9,7 @@ import org.fitness.myfitnesstrainer.databinding.CardActiveSetsBinding
 import org.fitness.myfitnesstrainer.models.ExerciseModel
 import org.fitness.myfitnesstrainer.models.SetModel
 import org.fitness.myfitnesstrainer.models.WorkoutModel
+import timber.log.Timber
 
 class ActiveWorkoutAdapter(data: WorkoutModel) : GenericAdapter<ExerciseModel>(data.exercises) {
     val workout = data
@@ -49,6 +50,7 @@ class ActiveWorkoutAdapter(data: WorkoutModel) : GenericAdapter<ExerciseModel>(d
     inner class ActiveSetsAdapter(data: ExerciseModel, binding: CardActiveExercisesBinding) : GenericAdapter<SetModel>(data.sets) {
         val exercise = data
         val checkedSets : MutableList<SetModel> = mutableListOf()
+        var postition: Int = 0
 
         fun completeExercise(): ExerciseModel {
             return ExerciseModel(exercise.name, exercise.description, checkedSets)
@@ -58,9 +60,17 @@ class ActiveWorkoutAdapter(data: WorkoutModel) : GenericAdapter<ExerciseModel>(d
             var view = viewBinding as CardActiveSetsBinding
             view.txtSetReps.text = set.reps.size.toString()
             view.inputWeight.hint = 0.toString()
-            view.checkedTextView.setOnClickListener() {
-                checkedSets.add(set)
+
+            view.checkedTextView.setOnCheckedChangeListener { _, isChecked ->
+                if(isChecked) {
+                    checkedSets.add(set)
+                } else {
+                    checkedSets.remove(set)
+                }
+
             }
+            view.txtSetNumber.text = (postition + 1).toString()
+            postition += 1
         }
 
         override var expressionOnCreateViewHolder: ((ViewGroup) -> ViewBinding)? = {viewGroup->

@@ -8,7 +8,7 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
-import org.fitness.myfitnesstrainer.service.NetworkResult
+import org.fitness.myfitnesstrainer.api.NetworkResult
 import org.fitness.myfitnesstrainer.api.RetrofitInstance
 import org.fitness.myfitnesstrainer.api.models.AuthRequest
 import org.fitness.myfitnesstrainer.databinding.ActivityLoginBinding
@@ -29,6 +29,21 @@ class LoginActivity : AppCompatActivity() {
         binding.btnLogin.setOnClickListener {
             lifecycleScope.async {
                 val success = login(binding.inptEmail.text.toString(), binding.inptPassword.text.toString()).await()
+                if(success) {
+                    app.refreshProfile().await()
+                    Timber.i("Finished calling refresh profile")
+                    finish()
+                    return@async startMainActivity()
+                }
+//                else {
+//                    return@async loginFailed()
+//                }
+            }
+        }
+
+        binding.btnSignup.setOnClickListener {
+            lifecycleScope.async {
+                val success = signup(binding.inptEmail.text.toString(), binding.inptPassword.text.toString()).await()
                 if(success) {
                     app.refreshProfile().await()
                     Timber.i("Finished calling refresh profile")
@@ -63,6 +78,34 @@ class LoginActivity : AppCompatActivity() {
 
                 is NetworkResult.Error -> {
                     Timber.i("Login Failure")
+                    Timber.i(response.errorMsg)
+                    return@async false
+                }
+
+                is NetworkResult.Exception -> {
+                    Timber.i("%s", response.e)
+                    throw Exception("Ya done son")
+                }
+            }
+        }
+        return loginDeferred
+    }
+
+    private suspend fun signup(email: String, password: String): Deferred<Boolean> {
+        val authRequest = AuthRequest(email, password)
+        Timber.i("Signup")
+
+        val loginDeferred = lifecycleScope.async {
+            when (val response = RetrofitInstance.service.signup(authRequest)) {
+                is NetworkResult.Success -> {
+                    Timber.i("Signup Success")
+                    RetrofitInstance.TOKEN = response.data.token
+                    return@async true
+                }
+
+                is NetworkResult.Error -> {
+                    Timber.i("Signup Failure")
+                    Timber.i(response.errorMsg)
                     return@async false
                 }
 

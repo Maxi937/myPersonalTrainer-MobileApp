@@ -11,7 +11,6 @@ import org.fitness.myfitnesstrainer.activities.MainActivity
 import org.fitness.myfitnesstrainer.databinding.FragmentDashboardBinding
 
 class FragmentDashboard : Fragment() {
-    private val user: String = ""
     lateinit var activity: MainActivity
     private lateinit var binding: FragmentDashboardBinding
 
@@ -23,7 +22,12 @@ class FragmentDashboard : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentDashboardBinding.inflate(layoutInflater)
 
-        binding.txtDashboardUserName.text = activity.app.profile!!.fname
+        var welcome = "Welcome, " + activity.app.profile!!.fname
+        val fullName = activity.app.profile!!.fname + activity.app.profile!!.lname
+
+        binding.txtDashboardUserName.text = (welcome)
+        binding.txtFullName.text = fullName
+        binding.txtUserEmail.text = activity.app.profile!!.email
 
         val view : View = binding.root;
         return view
