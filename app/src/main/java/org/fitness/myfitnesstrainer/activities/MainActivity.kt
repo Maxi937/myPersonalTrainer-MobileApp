@@ -2,10 +2,13 @@ package org.fitness.myfitnesstrainer.activities
 
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavController
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
 import org.fitness.myfitnesstrainer.R
 import org.fitness.myfitnesstrainer.databinding.ActivityMainBinding
@@ -37,6 +40,11 @@ class MainActivity : AppCompatActivity() {
 
         // Attaches nav controller to the bottom nav in the main activity xml
         binding.bottomNav.setupWithNavController(this.navController)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val navController = findNavController(binding.navHostFragment.id)
+        return item.onNavDestinationSelected(navController) || super.onOptionsItemSelected(item)
     }
 
     // This inflates the top_menu_settings.xml menu items into the top settings bar
