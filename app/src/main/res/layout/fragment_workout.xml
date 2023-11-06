@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:tag="fragment-workout"
     tools:context=".fragments.FragmentWorkout">
 
     <LinearLayout

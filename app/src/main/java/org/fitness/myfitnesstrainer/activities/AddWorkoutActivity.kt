@@ -1,9 +1,12 @@
 package org.fitness.myfitnesstrainer.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
@@ -25,26 +28,32 @@ class AddWorkoutActivity : AppCompatActivity() {
     private var exercises = ArrayList<ExerciseModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        exercises = intent.extras?.getParcelableArrayList("exercises", ExerciseModel::class.java)!!;
-
         super.onCreate(savedInstanceState)
+        exercises = intent.extras?.getParcelableArrayList("exercises", ExerciseModel::class.java)!!;
         app = application as MainApp
         binding = ActivityAddWorkoutBinding.inflate(layoutInflater)
         var adapter = bindActivityAddWorkout(exercises, binding)
 
         binding.btnAddWorkout.setOnClickListener {
             val addedExercises = adapter.getChecked()
+            Timber.i("Added E %s", addedExercises)
             val newWorkout = WorkoutModel(binding.txtInputNewWorkoutName.text.toString(), addedExercises)
 
-            GlobalScope.async {
+            lifecycleScope.async {
                 val success = addWorkout(newWorkout)
                 if(success) {
-                    finish()
+                    app.refreshProfile()
+                    return@async endAddWorkout()
                 }
             }
         }
-
         setContentView(binding.root)
+    }
+
+    private fun endAddWorkout() {
+        val intent = Intent(this, MainActivity::class.java)
+        this.startActivity(intent)
+        finish()
     }
 
     private fun bindActivityAddWorkout(data: List<ExerciseModel>, binding: ActivityAddWorkoutBinding): AddWorkoutAdapter {
@@ -59,7 +68,7 @@ class AddWorkoutActivity : AppCompatActivity() {
 
     private suspend fun addWorkout(workoutModel: WorkoutModel): Boolean {
         Timber.i("Adding Workout")
-        val addWorkoutDeferred = GlobalScope.async {
+        val addWorkoutDeferred = lifecycleScope.async {
             when (val response = RetrofitInstance.service.addWorkout(workoutModel)) {
                 is NetworkResult.Success -> {
                     Timber.i("Add Workout Success")
@@ -68,7 +77,7 @@ class AddWorkoutActivity : AppCompatActivity() {
                 }
 
                 is NetworkResult.Error -> {
-                    Timber.i("Login Failure")
+                    Timber.i("Add Workout Failure")
                     return@async false
                 }
 

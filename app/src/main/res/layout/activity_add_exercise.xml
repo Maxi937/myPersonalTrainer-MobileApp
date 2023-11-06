@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/txt_input_new_exercise_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Exercise Name"
+        android:inputType="text"
+        android:padding="25dp" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/txt_input_new_exercise_sets"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Sets"
+        android:inputType="number"
+        android:padding="25dp" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/txt_input_new_exercise_reps"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Reps"
+        android:inputType="number"
+        android:padding="25dp" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/txt_input_new_exercise_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Description"
+        android:inputType="text"
+        android:padding="25dp" />
+
+    <Button
+        android:id="@+id/btn_add_exercise"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Done" />
+</LinearLayout>

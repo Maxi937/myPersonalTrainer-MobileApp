@@ -3,29 +3,34 @@ package org.fitness.myfitnesstrainer.fragments
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import org.fitness.myfitnesstrainer.activities.MainActivity
-import org.fitness.myfitnesstrainer.databinding.FragmentWorkoutBinding
-import org.fitness.myfitnesstrainer.models.WorkoutModel
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.async
 import org.fitness.myfitnesstrainer.R
 import org.fitness.myfitnesstrainer.activities.AddWorkoutActivity
-import org.fitness.myfitnesstrainer.activities.WorkoutActivity
+import org.fitness.myfitnesstrainer.activities.MainActivity
 import org.fitness.myfitnesstrainer.adapters.GenericAdapter
+import org.fitness.myfitnesstrainer.api.RetrofitInstance
 import org.fitness.myfitnesstrainer.databinding.CardExerciseBinding
 import org.fitness.myfitnesstrainer.databinding.CardWorkoutDetailsBinding
+import org.fitness.myfitnesstrainer.databinding.FragmentWorkoutBinding
 import org.fitness.myfitnesstrainer.models.ExerciseModel
+import org.fitness.myfitnesstrainer.models.WorkoutModel
+import org.fitness.myfitnesstrainer.service.NetworkResult
+import timber.log.Timber
 import kotlin.reflect.KFunction1
 
 
 class FragmentWorkout : Fragment() {
     lateinit var activity: MainActivity
+    lateinit var mAdapter: GenericAdapter<WorkoutModel>
     private lateinit var binding: FragmentWorkoutBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,8 +40,7 @@ class FragmentWorkout : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = FragmentWorkoutBinding.inflate(layoutInflater);
-        bindFragmentWorkout(activity.profile.workouts, binding, ::navigateStartWorkout)
+        mAdapter = bindFragmentWorkout(activity.app.profile!!.workouts, binding, ::navigateStartWorkout)
         val view : View = binding.root;
         return view
     }
@@ -50,16 +54,7 @@ class FragmentWorkout : Fragment() {
         var mAdapter = GenericAdapter(data)
 
         binding.idAddWorkout.setOnClickListener {
-            val exercises: List<ExerciseModel> = activity.profile.exercises
-            val mExercises = ArrayList<ExerciseModel>()
-
-            for(e in exercises) {
-                mExercises.add(e)
-            }
-
-            val intent = Intent(activity, AddWorkoutActivity::class.java)
-            intent.putParcelableArrayListExtra("exercises", mExercises)
-            activity?.startActivity(intent)
+           addWorkout()
         }
 
         mAdapter.expressionViewHolderBinding = {workout, viewBinding->
@@ -68,6 +63,12 @@ class FragmentWorkout : Fragment() {
             view.rvExercises.adapter = bindCardWorkoutBinding(workout, viewBinding)
             view.root.setOnClickListener {
                 onClick(workout)
+            }
+            view.btnDeleteWorkout.setOnClickListener {
+                lifecycleScope.async {
+                    deleteWorkout(workout)
+                    mAdapter.deleteItemFromData(workout)
+                }
             }
         }
 
@@ -80,6 +81,40 @@ class FragmentWorkout : Fragment() {
             adapter = mAdapter
         }
         return mAdapter
+    }
+
+    private suspend fun deleteWorkout(workout: WorkoutModel) {
+        Timber.i("Delete Workout")
+        val successDeferred = lifecycleScope.async {
+            when (val response = RetrofitInstance.service.deleteWorkout(workout)) {
+                is NetworkResult.Success -> {
+                    Timber.i("Delete Exercise Success")
+                }
+
+                is NetworkResult.Error -> {
+                    Timber.i("Delete Exercise Failure")
+                    return@async false
+                }
+
+                is NetworkResult.Exception -> {
+                    Timber.i("%s", response.e)
+                    throw Exception("Ya done son")
+                }
+            }
+        }.await()
+    }
+    private fun addWorkout() {
+        val exercises: List<ExerciseModel> = activity.app.profile!!.exercises
+        val mExercises = ArrayList<ExerciseModel>()
+
+        for(e in exercises) {
+            mExercises.add(e)
+        }
+
+        val intent = Intent(activity, AddWorkoutActivity::class.java)
+        intent.putParcelableArrayListExtra("exercises", mExercises)
+        activity?.startActivity(intent)
+        activity.finish()
     }
 
     private fun bindCardWorkoutBinding(data: WorkoutModel, binding: CardWorkoutDetailsBinding): GenericAdapter<ExerciseModel> {
@@ -102,7 +137,5 @@ class FragmentWorkout : Fragment() {
         }
         return mAdapter
     }
-
-
 }
 

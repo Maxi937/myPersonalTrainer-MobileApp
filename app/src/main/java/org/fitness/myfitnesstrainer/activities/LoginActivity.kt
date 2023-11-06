@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import org.fitness.myfitnesstrainer.service.NetworkResult
@@ -24,11 +25,11 @@ class LoginActivity : AppCompatActivity() {
 
         binding = ActivityLoginBinding.inflate(layoutInflater)
         binding.btnLogin.setOnClickListener {
-            val profile = GlobalScope.async {
+            val profile = lifecycleScope.async {
                 val success = login(binding.inptEmail.text.toString(), binding.inptPassword.text.toString())
                 if(success) {
+                    app.refreshProfile()
                     return@async startMainActivity()
-
                 }
                 else {
                     return@async loginFailed()
@@ -54,7 +55,7 @@ class LoginActivity : AppCompatActivity() {
         val authRequest = AuthRequest(email, password)
         Timber.i("Logging In")
 
-        val loginDeferred = GlobalScope.async {
+        val loginDeferred = lifecycleScope.async {
             when (val response = RetrofitInstance.service.authenticate(authRequest)) {
                 is NetworkResult.Success -> {
                     Timber.i("Login Success")

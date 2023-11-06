@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.async
 import org.fitness.myfitnesstrainer.activities.MainActivity
 import org.fitness.myfitnesstrainer.databinding.FragmentDashboardBinding
 
@@ -20,7 +22,9 @@ class FragmentDashboard : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentDashboardBinding.inflate(layoutInflater)
-        binding.txtDashboardUserName.text = activity.profile.fname
+
+        binding.txtDashboardUserName.text = activity.app.profile!!.fname
+
         val view : View = binding.root;
         return view
     }

@@ -1,11 +1,14 @@
 package org.fitness.myfitnesstrainer.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import org.fitness.myfitnesstrainer.activities.AddExerciseActivity
+import org.fitness.myfitnesstrainer.activities.AddWorkoutActivity
 import org.fitness.myfitnesstrainer.activities.MainActivity
 import org.fitness.myfitnesstrainer.adapters.GenericAdapter
 import org.fitness.myfitnesstrainer.databinding.CardExerciseDetailsBinding
@@ -24,14 +27,19 @@ class FragmentExercises : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = FragmentExercisesBinding.inflate(layoutInflater);
-        bindFragmentExercise(activity.profile.exercises, binding)
+        bindFragmentExercise(activity.app.profile!!.exercises, binding)
         val view : View = binding.root;
         return view
     }
 
     private fun bindFragmentExercise(data: List<ExerciseModel>, binding: FragmentExercisesBinding): GenericAdapter<ExerciseModel> {
         var mAdapter = GenericAdapter(data)
+
+        binding.idAddExercise.setOnClickListener {
+            val intent = Intent(activity, AddExerciseActivity::class.java)
+            activity?.startActivity(intent)
+            activity.finish()
+        }
 
         mAdapter.expressionViewHolderBinding = {exercise, viewBinding->
             var view = viewBinding as CardExerciseDetailsBinding
