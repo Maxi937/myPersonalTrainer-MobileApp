@@ -26,6 +26,10 @@
             </intent-filter>
         </activity>
         <activity
+            android:name="org.fitness.myfitnesstrainer.activities.SignupActivity"
+            android:exported="true">
+        </activity>
+        <activity
             android:name="org.fitness.myfitnesstrainer.activities.MainActivity"
             android:exported="true">
         </activity>

@@ -9,6 +9,7 @@ import org.fitness.myfitnesstrainer.api.models.apiWorkout
 import org.fitness.myfitnesstrainer.models.ExerciseModel
 import org.fitness.myfitnesstrainer.models.WorkoutModel
 import org.fitness.myfitnesstrainer.api.NetworkResult
+import org.fitness.myfitnesstrainer.api.models.SignupRequest
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -24,7 +25,7 @@ interface ApiServices {
     suspend fun getProfile(): Response<apiProfile>
 
     @POST("/api/users")
-    suspend fun signup(@Body authRequest: AuthRequest): Response<Token>
+    suspend fun signup(@Body signupRequest: SignupRequest): Response<apiStatus>
 
     @POST("/api/workouts")
     suspend fun addWorkout(@Body workout: WorkoutModel): Response<apiWorkout>
@@ -34,6 +35,7 @@ interface ApiServices {
 
     @POST("/api/workouts/delete")
     suspend fun deleteWorkout(@Body workout: WorkoutModel): Response<apiStatus>
+
     @POST("/api/exercises/delete")
     suspend fun deleteExercise(@Body exercise: ExerciseModel): Response<apiStatus>
 

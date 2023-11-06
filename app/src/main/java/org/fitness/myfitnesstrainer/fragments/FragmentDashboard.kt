@@ -23,7 +23,7 @@ class FragmentDashboard : Fragment() {
         binding = FragmentDashboardBinding.inflate(layoutInflater)
 
         var welcome = "Welcome, " + activity.app.profile!!.fname
-        val fullName = activity.app.profile!!.fname + activity.app.profile!!.lname
+        val fullName = activity.app.profile!!.fname + " " + activity.app.profile!!.lname
 
         binding.txtDashboardUserName.text = (welcome)
         binding.txtFullName.text = fullName

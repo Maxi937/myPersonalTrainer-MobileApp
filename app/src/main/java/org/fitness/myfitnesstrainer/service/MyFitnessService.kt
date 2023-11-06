@@ -4,6 +4,7 @@ import org.fitness.myfitnesstrainer.api.ApiHandler
 import org.fitness.myfitnesstrainer.api.ApiServices
 import org.fitness.myfitnesstrainer.api.NetworkResult
 import org.fitness.myfitnesstrainer.api.models.AuthRequest
+import org.fitness.myfitnesstrainer.api.models.SignupRequest
 import org.fitness.myfitnesstrainer.api.models.Token
 import org.fitness.myfitnesstrainer.api.models.apiExercise
 import org.fitness.myfitnesstrainer.api.models.apiProfile
@@ -21,7 +22,7 @@ interface MyFitnessService {
 
     suspend fun authenticate(authRequest: AuthRequest): NetworkResult<Token>
 
-    suspend fun signup(authRequest: AuthRequest): NetworkResult<Token>
+    suspend fun signup(signupRequest: SignupRequest): NetworkResult<apiStatus>
 
     suspend fun addExercise(exercise: ExerciseModel): NetworkResult<apiExercise>
 
@@ -39,7 +40,7 @@ class MyFitnessServiceImp(private val apiServices: ApiServices) : MyFitnessServi
 
     override suspend fun authenticate(authRequest: AuthRequest): NetworkResult<Token> = handleApi { apiServices.authenticate(authRequest) }
 
-    override suspend fun signup(authRequest: AuthRequest): NetworkResult<Token> = handleApi { apiServices.signup(authRequest) }
+    override suspend fun signup(signupRequest: SignupRequest): NetworkResult<apiStatus> = handleApi { apiServices.signup(signupRequest) }
 
     override suspend fun addExercise(exercise: ExerciseModel): NetworkResult<apiExercise> = handleApi { apiServices.addExercise(exercise) }
 

@@ -14,58 +14,52 @@ import org.fitness.myfitnesstrainer.api.RetrofitInstance
 import org.fitness.myfitnesstrainer.api.models.AuthRequest
 import org.fitness.myfitnesstrainer.api.models.SignupRequest
 import org.fitness.myfitnesstrainer.databinding.ActivityLoginBinding
+import org.fitness.myfitnesstrainer.databinding.ActivitySignUpBinding
 import org.fitness.myfitnesstrainer.main.MainApp
 import org.fitness.myfitnesstrainer.models.Profile
 import timber.log.Timber
 
-class LoginActivity : AppCompatActivity() {
+class SignupActivity : AppCompatActivity() {
     lateinit var app : MainApp
-    private lateinit var binding: ActivityLoginBinding
+    private lateinit var binding: ActivitySignUpBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         app = application as MainApp
 
-        binding = ActivityLoginBinding.inflate(layoutInflater)
+        binding = ActivitySignUpBinding.inflate(layoutInflater)
 
-        binding.btnLogin.setOnClickListener {
+        binding.btnFinishSignup.setOnClickListener {
             lifecycleScope.async {
-                val success = login(binding.inptEmail.text.toString(), binding.inptPassword.text.toString()).await()
+                val success = signup(binding.txtUnputSignupEmail.text.toString(), binding.txtUnputSignupPassword.text.toString(), binding.txtUnputSignupFname.text.toString(), binding.txtUnputSignupLname.text.toString()).await()
                 if(success) {
-                    return@async startMainActivity()
+                    return@async startLoginActivity()
+                }
+                else {
+                    binding.btnFinishSignup.text= "Something Went Wrong"
+                    binding.btnFinishSignup.setOnClickListener {
+                        startLoginActivity()
+                    }
                 }
             }
-        }
-
-        binding.btnSignup.setOnClickListener {
-            startSignUp()
         }
         setContentView(binding.root)
     }
 
-    private fun startSignUp() {
-        finish()
-        val intent = Intent(this@LoginActivity, SignupActivity::class.java)
-        startActivity(intent)
-    }
-
-
-    private suspend fun login(email: String, password: String): Deferred<Boolean> {
-        val authRequest = AuthRequest(email, password)
-        Timber.i("Logging In")
+    private suspend fun signup(email: String, password: String, fname: String, lname: String): Deferred<Boolean> {
+        val signupRequest = SignupRequest(email, password, fname, lname)
+        Timber.i("Signup")
 
         val loginDeferred = lifecycleScope.async {
-            when (val response = RetrofitInstance.service.authenticate(authRequest)) {
+            when (val response = RetrofitInstance.service.signup(signupRequest)) {
                 is NetworkResult.Success -> {
-                    Timber.i("Login Success")
-                    RetrofitInstance.TOKEN = response.data.token
+                    Timber.i("Signup Success")
                     return@async true
                 }
 
                 is NetworkResult.Error -> {
-                    Timber.i("Login Failure")
+                    Timber.i("Signup Failure")
                     Timber.i("response %s", response.code)
-                    binding.errMessage.visibility = View.VISIBLE
                     return@async false
                 }
 
@@ -78,11 +72,9 @@ class LoginActivity : AppCompatActivity() {
         return loginDeferred
     }
 
-    private suspend fun startMainActivity() {
-        (app as MainApp).refreshProfile().await()
-        Timber.i("Finished calling refresh profile")
+    private fun startLoginActivity() {
         finish()
-        val intent = Intent(this@LoginActivity, MainActivity::class.java)
+        val intent = Intent(this@SignupActivity, LoginActivity::class.java)
         startActivity(intent)
     }
 }
