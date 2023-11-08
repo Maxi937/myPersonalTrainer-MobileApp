@@ -33,7 +33,6 @@ class MainActivity : AppCompatActivity() {
         // Settings Bar Menu
         setSupportActionBar(binding.menuTopSettings)
 
-        // Set up nav host *findbyfragmentid used R.id.navhostfragment in docs, think this is old syntax - instead I am using binding
         val navHostFragment =
             supportFragmentManager.findFragmentById(binding.navHostFragment.id) as NavHostFragment
         this.navController = navHostFragment.navController

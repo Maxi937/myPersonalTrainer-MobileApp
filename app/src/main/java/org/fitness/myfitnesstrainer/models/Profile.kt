@@ -37,10 +37,6 @@ data class Profile(private val xProfile: xProfile) : Parcelable {
 
         for (apiWorkout in apiWorkouts) {
             val workout: WorkoutModel = WorkoutModel(apiWorkout.name, unwrapExercises(apiWorkout.exercises))
-            Timber.i("api: %s", apiWorkout)
-//            if(apiWorkout.date.isNotEmpty()) {
-//                workout.date = apiWorkout.date
-//            }
             mutWorkouts.add(workout)
         }
         return mutWorkouts.toList()
