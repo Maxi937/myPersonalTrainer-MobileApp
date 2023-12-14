@@ -1,6 +1,15 @@
 # **Description**
 Android App for creating exercises / tracking workouts.
 
+## **Testing**
+
+Homer Simpson account is seedied with some data for testing purposes.
+
+Login in with: 
+
+Email: homer@simpson.com
+Password: secret
+
 ## **Backend URL**
 <https://myfitnesstrainer-backend.onrender.com>
 
