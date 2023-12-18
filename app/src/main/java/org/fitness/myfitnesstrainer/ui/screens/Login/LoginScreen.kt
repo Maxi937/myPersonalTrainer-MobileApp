@@ -1,6 +1,7 @@
 package org.fitness.myfitnesstrainer.ui.screens.Login
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,8 +13,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.*
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -26,7 +25,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -35,16 +33,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
 import org.fitness.myfitnesstrainer.R
 import org.fitness.myfitnesstrainer.ui.composables.ButtonWithSpinner.ButtonWithSpinner
 import org.fitness.myfitnesstrainer.ui.theme.MyFitnessTrainerTheme
+import kotlin.reflect.KFunction1
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(viewModel: LoginViewModel = LoginViewModel(), modifier: Modifier = Modifier.fillMaxSize()) {
+fun LoginScreen(onSubmit: KFunction1<Intent, Unit>, viewModel: LoginViewModel = LoginViewModel(), modifier: Modifier = Modifier.fillMaxSize()) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var isAuthInProgress by remember { mutableStateOf(false) }
@@ -83,8 +81,9 @@ fun LoginScreen(viewModel: LoginViewModel = LoginViewModel(), modifier: Modifier
             ButtonWithSpinner(modifier = Modifier.fillMaxWidth(), buttonText = "Login", isAuthInProgress) {
                 isAuthInProgress = true
 
-                val login = coroutineScope.async {
-                    viewModel.login(email, password).await()
+                coroutineScope.async {
+                    val intent = viewModel.submit(email, password)
+                    onSubmit(intent)
                     isAuthInProgress = false
                 }
             }
@@ -99,10 +98,10 @@ fun LoginScreen(viewModel: LoginViewModel = LoginViewModel(), modifier: Modifier
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    MyFitnessTrainerTheme {
-        LoginScreen()
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun GreetingPreview() {
+//    MyFitnessTrainerTheme {
+//        LoginScreen()
+//    }
+//}

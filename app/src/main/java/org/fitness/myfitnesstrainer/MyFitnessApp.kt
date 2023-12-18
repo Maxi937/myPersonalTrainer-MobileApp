@@ -1,5 +1,6 @@
 package org.fitness.myfitnesstrainer
 
+import android.accounts.AccountManager
 import android.app.Application
 import android.content.Context
 import timber.log.Timber

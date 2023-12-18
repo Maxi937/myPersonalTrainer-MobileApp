@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<account-authenticator xmlns:android="http://schemas.android.com/apk/res/android"
+    android:accountType="typeOfAuthenticator"
+    android:icon="@drawable/dumbbell"
+    android:smallIcon="@drawable/dumbbell"
+    android:label="MyFitnessTrainer"
+    android:accountPreferences="@xml/account_preferences"
+    />
