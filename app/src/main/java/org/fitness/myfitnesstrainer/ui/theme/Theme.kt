@@ -17,9 +17,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.TextStyle
 import androidx.core.view.WindowCompat
-import org.fitness.myfitnesstrainer.data.repository.api.NetworkResult
-import org.fitness.myfitnesstrainer.data.repository.api.RetrofitInstance
-import timber.log.Timber
 
 private val DarkColorScheme = darkColorScheme(
     primary = Color.White,

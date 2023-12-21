@@ -1,8 +1,6 @@
-package org.fitness.myfitnesstrainer.data.repository.service
+package org.fitness.myfitnesstrainer.api
 
-import org.fitness.myfitnesstrainer.data.repository.api.ApiHandler
-import org.fitness.myfitnesstrainer.data.repository.api.ApiServices
-import org.fitness.myfitnesstrainer.data.repository.api.NetworkResult
+import org.fitness.myfitnesstrainer.data.remote.models.NetworkResult
 import org.fitness.myfitnesstrainer.data.remote.models.AuthRequest
 import org.fitness.myfitnesstrainer.data.remote.models.SignupRequest
 import org.fitness.myfitnesstrainer.data.remote.models.Token

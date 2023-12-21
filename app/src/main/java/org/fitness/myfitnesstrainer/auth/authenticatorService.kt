@@ -8,8 +8,9 @@ import timber.log.Timber
 
 class MyFitnessAuthenticatorService : Service() {
     override fun onBind(intent: Intent): IBinder? {
-        Timber.i("I got her")
+        Timber.i(this.toString())
         val authenticator = MyFitnessAuthenticator(this)
+        Timber.i(authenticator.iBinder.toString())
         return authenticator.iBinder
     }
 }

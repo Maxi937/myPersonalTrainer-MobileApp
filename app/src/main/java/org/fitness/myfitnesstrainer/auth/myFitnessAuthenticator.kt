@@ -4,52 +4,47 @@ package org.fitness.myfitnesstrainer.auth
 import android.accounts.*
 import android.accounts.AccountManager.KEY_AUTH_TOKEN_LABEL
 import android.accounts.AccountManager.KEY_BOOLEAN_RESULT
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
-import android.util.Log
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
+import timber.log.Timber
 
-class MyFitnessAuthenticator(private val dContext: Context) : AbstractAccountAuthenticator(dContext) {
-    private val mContext = dContext
-
+class MyFitnessAuthenticator(private val mContext: Context) : AbstractAccountAuthenticator(mContext) {
     @Throws(NetworkErrorException::class)
     override fun addAccount(
-        response: AccountAuthenticatorResponse,
-        accountType: String,
-        authTokenType: String,
-        requiredFeatures: Array<String>,
-        options: Bundle
-    ): Bundle {
+        response: AccountAuthenticatorResponse?,
+        accountType: String?,
+        authTokenType: String?,
+        requiredFeatures: Array<out String>?,
+        options: Bundle?
+    ): Bundle? {
+        Timber.i("Add Account Started")
         val intent = Intent(mContext, AuthenticatorActivity::class.java)
+        intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response)
         intent.putExtra("ARG_ACCOUNT_TYPE", accountType)
         intent.putExtra("ARG_AUTH_TYPE", authTokenType)
         intent.putExtra("ARG_IS_ADDING_NEW_ACCOUNT", true)
-        intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response)
         val bundle = Bundle()
         bundle.putParcelable(AccountManager.KEY_INTENT, intent)
         return bundle
     }
-
     @Throws(NetworkErrorException::class)
-    override fun getAuthToken(
-        response: AccountAuthenticatorResponse,
-        account: Account,
-        authTokenType: String,
-        options: Bundle
-    ): Bundle {
-
-        // Extract the username and password from the Account Manager, and ask
-        // the server for an appropriate AuthToken.
+    override fun getAuthToken(response: AccountAuthenticatorResponse, account: Account, authTokenType: String, options: Bundle): Bundle {
+        Timber.i("Attempting get AuthToken")
         val am = AccountManager.get(mContext)
         var authToken = am.peekAuthToken(account, authTokenType)
 
-        // Lets give another try to authenticate the user
+//        // Lets give another try to authenticate the user
         if (TextUtils.isEmpty(authToken)) {
             val password = am.getPassword(account)
             if (password != null) {
                 try {
-//                    authToken = sServerAuthenticate.userSignIn(account.name, password, authTokenType)
+                    authToken = AccountGeneral.login(account.name, password)
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }

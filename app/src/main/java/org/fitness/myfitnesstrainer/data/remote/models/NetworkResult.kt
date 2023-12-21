@@ -1,4 +1,4 @@
-package org.fitness.myfitnesstrainer.data.repository.api
+package org.fitness.myfitnesstrainer.data.remote.models
 
 sealed class NetworkResult<T : Any> {
     class Success<T: Any>(val code: Int,val data: T) : NetworkResult<T>()

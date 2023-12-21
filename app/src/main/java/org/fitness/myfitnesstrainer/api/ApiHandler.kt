@@ -1,5 +1,6 @@
-package org.fitness.myfitnesstrainer.data.repository.api
+package org.fitness.myfitnesstrainer.api
 
+import org.fitness.myfitnesstrainer.data.remote.models.NetworkResult
 import retrofit2.HttpException
 
 interface ApiHandler {

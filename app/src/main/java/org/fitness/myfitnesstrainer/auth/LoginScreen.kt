@@ -1,7 +1,6 @@
-package org.fitness.myfitnesstrainer.ui.screens.Login
+package org.fitness.myfitnesstrainer.auth
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -29,20 +28,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import kotlinx.coroutines.async
 import org.fitness.myfitnesstrainer.R
 import org.fitness.myfitnesstrainer.ui.composables.ButtonWithSpinner.ButtonWithSpinner
-import org.fitness.myfitnesstrainer.ui.theme.MyFitnessTrainerTheme
-import kotlin.reflect.KFunction1
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(onSubmit: KFunction1<Intent, Unit>, viewModel: LoginViewModel = LoginViewModel(), modifier: Modifier = Modifier.fillMaxSize()) {
+fun LoginScreen(onSubmit: (email: String, password: String) -> Unit, modifier: Modifier = Modifier.fillMaxSize()) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var isAuthInProgress by remember { mutableStateOf(false) }
@@ -80,14 +75,10 @@ fun LoginScreen(onSubmit: KFunction1<Intent, Unit>, viewModel: LoginViewModel = 
             Spacer(modifier = Modifier.height(20.dp))
             ButtonWithSpinner(modifier = Modifier.fillMaxWidth(), buttonText = "Login", isAuthInProgress) {
                 isAuthInProgress = true
-
-                coroutineScope.async {
-                    val intent = viewModel.submit(email, password)
-                    onSubmit(intent)
-                    isAuthInProgress = false
-                }
+                onSubmit(email, password)
             }
         }
+
         Column(verticalArrangement = Arrangement.Bottom, modifier = Modifier.fillMaxSize()) {
             Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
 //                Button(onClick = { viewModel.login(email, password) },  colors = ButtonDefaults.buttonColors(Color.Transparent)) {

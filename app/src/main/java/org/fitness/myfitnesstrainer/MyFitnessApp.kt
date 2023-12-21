@@ -3,6 +3,7 @@ package org.fitness.myfitnesstrainer
 import android.accounts.AccountManager
 import android.app.Application
 import android.content.Context
+import org.fitness.myfitnesstrainer.auth.AuthManager
 import timber.log.Timber
 
 
@@ -19,7 +20,7 @@ class MyFitnessApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        instance = this;
+        instance = this
 
         Timber.plant(Timber.DebugTree())
         Timber.i("My Fitness Trainer started")

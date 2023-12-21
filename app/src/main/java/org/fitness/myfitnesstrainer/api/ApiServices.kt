@@ -1,4 +1,4 @@
-package org.fitness.myfitnesstrainer.data.repository.api
+package org.fitness.myfitnesstrainer.api
 
 import org.fitness.myfitnesstrainer.data.remote.models.AuthRequest
 import org.fitness.myfitnesstrainer.data.remote.models.Token
