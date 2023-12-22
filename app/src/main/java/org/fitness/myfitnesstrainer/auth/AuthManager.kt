@@ -2,18 +2,12 @@ package org.fitness.myfitnesstrainer.auth
 
 import android.accounts.Account
 import android.accounts.AccountManager
-import android.accounts.AccountManagerCallback
-import android.accounts.AccountManagerFuture
 import android.app.Activity
 import android.os.Bundle
 import android.text.TextUtils
-import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
-import kotlinx.coroutines.runBlocking
 import org.fitness.myfitnesstrainer.api.MyFitnessClient
-import org.fitness.myfitnesstrainer.data.remote.models.AuthRequest
-import org.fitness.myfitnesstrainer.data.remote.models.NetworkResult
 import timber.log.Timber
 
 
@@ -21,27 +15,18 @@ class AuthManager(activity: Activity) {
     private var activity = activity
     private var mAccountManager: AccountManager = AccountManager.get(activity)
     private var loggedInAccountName: String? = null
+
     val loggedIn: MutableLiveData<Boolean> by lazy {
         MutableLiveData<Boolean>(false)
     }
-    val loggedInUser: MutableLiveData<Account> by lazy {
-        MutableLiveData<Account>(null)
-    }
 
-    fun checkLogin() {
-        val accounts = mAccountManager.getAccountsByType(AccountGeneral.ACCOUNT_TYPE)
+//    val User: MutableLiveData<xProfile> by lazy {
+//        MutableLiveData<xProfile>(null)
+//    }
 
-        if (accounts.isNotEmpty()) {
-            val account = accounts[0]
-            var token: String? = null
-
-            token = mAccountManager.peekAuthToken(account, AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS)
-            if (token != null) {
-                showMessage("Auth: True")
-            }
-        } else {
-            showMessage("Auth: False")
-        }
+    private fun addTokenToClient(token: String) {
+        showMessage("Token Added to Client: $token")
+        MyFitnessClient.TOKEN = token
     }
 
     private fun addAccount() {
@@ -54,8 +39,7 @@ class AuthManager(activity: Activity) {
             { future ->
                 try {
                     val bnd = future.result
-                    showMessage("Account was created")
-                    Log.d("My Fitness", "AddNewAccount Bundle is $bnd")
+                    val accountName = bnd.getString(AccountManager.KEY_ACCOUNT_NAME)
                 } catch (e: java.lang.Exception) {
                     e.printStackTrace()
                     showMessage(e.message)
@@ -65,7 +49,7 @@ class AuthManager(activity: Activity) {
         )
     }
 
-    fun getAccount(): Account? {
+    private fun getAccount(): Account? {
         val accounts = mAccountManager.getAccountsByType(AccountGeneral.ACCOUNT_TYPE)
 
         if (accounts.isNotEmpty()) {
@@ -87,9 +71,8 @@ class AuthManager(activity: Activity) {
                     val authtoken = bnd!!.getString(AccountManager.KEY_AUTHTOKEN)
 
                     if (authtoken != null) {
-                        loggedInUser.postValue(getAccount())
+                        addTokenToClient(authtoken)
                         loggedIn.postValue(true)
-                        showMessage("logged In: $loggedIn")
                     }
                 },
                 null
@@ -110,49 +93,23 @@ class AuthManager(activity: Activity) {
                     val authtoken = bnd!!.getString(AccountManager.KEY_AUTHTOKEN)
 
                     if (authtoken != null) {
+                        addTokenToClient(authtoken)
                         loggedInAccountName = bnd!!.getString(AccountManager.KEY_ACCOUNT_NAME)
                         loggedIn.postValue(true)
-                        showMessage("Posting True to logged in")
                     }
                 } catch (e: Exception) {
-                    showMessage("error")
                     e.printStackTrace()
                 }
             }, null
         )
     }
 
-    fun login(email: String, password: String): String {
-        Timber.i("Logging In:  Email: $email  Password: $password")
-        val authRequest = AuthRequest(email, password)
-
-        var token: String = runBlocking {
-            when (val response = MyFitnessClient.service.authenticate(authRequest)) {
-                is NetworkResult.Success -> {
-                    return@runBlocking response.data.token
-                }
-
-                is NetworkResult.Error -> {
-                    showMessage("Failed to login: $response.code")
-                    return@runBlocking ""
-                }
-
-                is NetworkResult.Exception -> {
-                    showMessage("Network Error: $response.e")
-                    throw Exception("Ya done son")
-                }
-            }
-        }
-        return token
-    }
-
     fun logout() {
         val account = getAccount()
 
         if (account != null) {
-//            invalidateAuthToken(account, AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS)
-            loggedIn.postValue(false)
             removeAccount(account)
+            loggedIn.postValue(false)
         }
     }
 
@@ -161,10 +118,8 @@ class AuthManager(activity: Activity) {
             account, activity, { future ->
                 val bnd = future.result
                 val result = bnd.getBoolean(AccountManager.KEY_BOOLEAN_RESULT)
-                showMessage("account removed: ${account.name}")
             }, null
         )
-
     }
 
     private fun showMessage(msg: String?) {

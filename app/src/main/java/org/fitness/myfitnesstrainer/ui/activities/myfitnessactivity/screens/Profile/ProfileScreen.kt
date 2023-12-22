@@ -1,9 +1,7 @@
-package org.fitness.myfitnesstrainer.ui.screens.Profile
+package org.fitness.myfitnesstrainer.ui.activities.myfitnessactivity.screens.Profile
 
 
 
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.*
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier

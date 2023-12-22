@@ -9,8 +9,7 @@ import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material3.Surface
-import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.async
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import org.fitness.myfitnesstrainer.ui.theme.MyFitnessTrainerTheme
 import timber.log.Timber
 
@@ -24,6 +23,7 @@ class AuthenticatorActivity : AppCompatActivity () {
     override fun onCreate(savedInstanceState: Bundle?) {
         Timber.i("Auth Activity Started")
         super.onCreate(savedInstanceState)
+        installSplashScreen()
 
         mAccountAuthenticatorResponse = intent.getParcelableExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, AccountAuthenticatorResponse::class.java);
         mAccountAuthenticatorResponse?.onRequestContinued()
@@ -36,7 +36,6 @@ class AuthenticatorActivity : AppCompatActivity () {
             MyFitnessTrainerTheme {
                 Surface {
                     LoginScreen({ email, password ->
-                        lifecycleScope.async {
                             val intent = submit(email, password)
                             if (intent.hasExtra("KEY_ERROR_MESSAGE")) {
                                 Toast.makeText(
@@ -47,8 +46,6 @@ class AuthenticatorActivity : AppCompatActivity () {
                             } else {
                                 finishLogin(intent);
                             }
-
-                        }
 
                     })
                 }
@@ -67,11 +64,11 @@ class AuthenticatorActivity : AppCompatActivity () {
         mResultBundle = result
     }
 
-    private suspend fun submit(email: String, password: String): Intent {
+    private fun submit(email: String, password: String): Intent {
         var authtoken: String? = null
         val data = Bundle()
         try {
-            authtoken = AccountGeneral.loginNon(email, password)
+            authtoken = AccountGeneral.login(email, password)
             data.putString(AccountManager.KEY_ACCOUNT_NAME, email)
             data.putString(
                 AccountManager.KEY_ACCOUNT_TYPE,

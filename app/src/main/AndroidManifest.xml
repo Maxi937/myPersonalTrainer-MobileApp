@@ -28,7 +28,7 @@
 
         <service android:name=".auth.MyFitnessAuthenticatorService"
             android:exported="false"
-            android:theme="@style/Theme.AppCompat">
+            android:theme="@style/Theme.SplashScreen.MySplash">
         <intent-filter>
             <action android:name="android.accounts.AccountAuthenticator" />
         </intent-filter>
@@ -36,12 +36,12 @@
             android:resource="@xml/account_authenticator" />
         </service>
 
-        <activity android:name=".auth.AuthenticatorActivity" android:label="MyFitnessTrainer" android:theme="@style/Theme.AppCompat"/>
+        <activity android:name=".auth.AuthenticatorActivity" android:label="MyFitnessTrainer" android:theme="@style/Theme.SplashScreen.MySplash"/>
 
         <activity
-            android:name=".MyFitnessActivity"
+            android:name=".ui.activities.myfitnessactivity.MyFitnessActivity"
             android:exported="true"
-            android:theme="@style/Theme.AppCompat">
+            android:theme="@style/Theme.SplashScreen.MySplash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

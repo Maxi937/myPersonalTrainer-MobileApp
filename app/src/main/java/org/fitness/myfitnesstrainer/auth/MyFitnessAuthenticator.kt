@@ -4,14 +4,10 @@ package org.fitness.myfitnesstrainer.auth
 import android.accounts.*
 import android.accounts.AccountManager.KEY_AUTH_TOKEN_LABEL
 import android.accounts.AccountManager.KEY_BOOLEAN_RESULT
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.async
-import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 
 class MyFitnessAuthenticator(private val mContext: Context) : AbstractAccountAuthenticator(mContext) {

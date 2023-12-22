@@ -1,15 +1,15 @@
-package org.fitness.myfitnesstrainer.ui.composables.BottomNavBar
+package org.fitness.myfitnesstrainer.ui.activities.myfitnessactivity.routes
 
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.Dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import org.fitness.myfitnesstrainer.ui.screens.Profile.ProfileScreen
+import org.fitness.myfitnesstrainer.ui.activities.myfitnessactivity.screens.Profile.ProfileScreen
+import org.fitness.myfitnesstrainer.ui.composables.BottomNavBar.BottomNavItem
 
 
 @Composable

@@ -34,25 +34,5 @@ object AccountGeneral {
         }
         return token
     }
-
-    suspend fun loginNon(email: String, password: String): String {
-        Timber.i("Logging In:  Email: $email  Password: $password")
-        val authRequest = AuthRequest(email, password)
-
-        var token: String = when (val response = MyFitnessClient.service.authenticate(authRequest)) {
-                is NetworkResult.Success -> {
-                    response.data.token
-                }
-
-                is NetworkResult.Error -> {
-                    return ""
-                }
-
-                is NetworkResult.Exception -> {
-                    throw Exception("Ya done son")
-                }
-            }
-        return token
-    }
 }
 

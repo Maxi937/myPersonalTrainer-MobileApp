@@ -30,6 +30,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.async
 import org.fitness.myfitnesstrainer.R
 import org.fitness.myfitnesstrainer.ui.composables.ButtonWithSpinner.ButtonWithSpinner
 
@@ -37,14 +38,21 @@ import org.fitness.myfitnesstrainer.ui.composables.ButtonWithSpinner.ButtonWithS
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(onSubmit: (email: String, password: String) -> Unit, modifier: Modifier = Modifier.fillMaxSize()) {
+fun LoginScreen(
+    onSubmit: (email: String, password: String) -> Unit,
+    modifier: Modifier = Modifier.fillMaxSize()
+) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var isAuthInProgress by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
 
     Scaffold(modifier = Modifier.padding(25.dp)) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Top, modifier = Modifier.fillMaxWidth()) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top,
+            modifier = Modifier.fillMaxWidth()
+        ) {
             Image(
                 modifier = Modifier
                     .width(120.dp)
@@ -53,8 +61,15 @@ fun LoginScreen(onSubmit: (email: String, password: String) -> Unit, modifier: M
                 contentDescription = "A dumbell icon for calling"
             )
         }
-        Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center, modifier = Modifier.fillMaxSize()) {
-            Text(text = "Login", style = TextStyle(fontSize = 40.sp, fontFamily = FontFamily.Default))
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Text(
+                text = "Login",
+                style = TextStyle(fontSize = 40.sp, fontFamily = FontFamily.Default)
+            )
             Spacer(modifier = Modifier.height(20.dp))
             TextField(
                 value = email,
@@ -73,9 +88,16 @@ fun LoginScreen(onSubmit: (email: String, password: String) -> Unit, modifier: M
                 visualTransformation = PasswordVisualTransformation()
             )
             Spacer(modifier = Modifier.height(20.dp))
-            ButtonWithSpinner(modifier = Modifier.fillMaxWidth(), buttonText = "Login", isAuthInProgress) {
+            ButtonWithSpinner(
+                modifier = Modifier.fillMaxWidth(),
+                buttonText = "Login",
+                isAuthInProgress
+            ) {
                 isAuthInProgress = true
-                onSubmit(email, password)
+                coroutineScope.async {
+                    onSubmit(email, password)
+                    isAuthInProgress = false
+                }
             }
         }
 
