@@ -17,27 +17,43 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.TextStyle
 import androidx.core.view.WindowCompat
+import com.google.android.material.color.utilities.MaterialDynamicColors.onBackground
+import com.google.android.material.color.utilities.MaterialDynamicColors.onPrimary
+import com.google.android.material.color.utilities.MaterialDynamicColors.onSecondary
+import com.google.android.material.color.utilities.MaterialDynamicColors.onSurface
+import com.google.android.material.color.utilities.MaterialDynamicColors.primaryInverse
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Color.White,
-    secondary = Color.White,
-    tertiary = Color.White,
-    background = Color.Black,
-    surface = Color.Black,
+    background = surfaceBlack,
+    surface = surfaceBlack,
+    onSurface = surfaceBlack,
+    outline = surfaceWhite,
+    primary = primaryDark,
+    onPrimary = Color.White,
+    inversePrimary = surfaceWhite,
+    primaryContainer = primaryDarkContainer,
+    secondary = primaryDarkGold,
+    secondaryContainer = secondaryDarkContainer,
+    onSecondary = Color.White,
+    onSecondaryContainer = Color.White,
+    tertiary = tertiaryDarkPurple,
+    tertiaryContainer = tertiaryDarkPurple,
+    scrim = scrimDark
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = PrimaryWhite,
-    secondary = PrimaryWhite,
-    tertiary = Pink40,
-    background = PrimaryWhite,
-    surface = PrimaryWhite,
+    primary = surfaceWhite,
+    secondary = surfaceWhite,
+    tertiary = surfaceWhite,
+    background = surfaceWhite,
+    surface = surfaceWhite,
+    outline = Color.Magenta
 )
 
 @Composable
 fun MyFitnessTrainerTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {

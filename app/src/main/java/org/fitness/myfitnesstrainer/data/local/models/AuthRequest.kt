@@ -1,4 +1,4 @@
-package org.fitness.myfitnesstrainer.data.remote.models
+package org.fitness.myfitnesstrainer.data.local.models
 
 data class AuthRequest(
     val email: String,

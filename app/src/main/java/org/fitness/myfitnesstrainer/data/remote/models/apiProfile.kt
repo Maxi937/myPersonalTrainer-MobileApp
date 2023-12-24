@@ -5,6 +5,6 @@ import kotlinx.parcelize.Parcelize
 import org.fitness.myfitnesstrainer.data.local.models.Profile
 @Parcelize
 data class apiProfile(
-    val profile: xProfile,
+    val profile: Profile,
     val status: String
 ) : Parcelable

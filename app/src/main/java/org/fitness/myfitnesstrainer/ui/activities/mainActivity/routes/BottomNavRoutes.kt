@@ -1,28 +1,31 @@
-package org.fitness.myfitnesstrainer.ui.activities.myfitnessactivity.routes
+package org.fitness.myfitnesstrainer.ui.activities.mainActivity.routes
 
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import org.fitness.myfitnesstrainer.ui.activities.myfitnessactivity.screens.Profile.ProfileScreen
+import org.fitness.myfitnesstrainer.data.local.models.Profile
+import org.fitness.myfitnesstrainer.ui.activities.mainActivity.screens.Profile.ProfileScreen
+import org.fitness.myfitnesstrainer.ui.activities.mainActivity.screens.Workout.WorkoutScreen
 import org.fitness.myfitnesstrainer.ui.composables.BottomNavBar.BottomNavItem
 
 
 @Composable
-fun BottomNavRoutes(navController: NavHostController, padding: PaddingValues) {
+fun BottomNavRoutes(navController: NavHostController, padding: PaddingValues, profile: Profile) {
     NavHost(navController, startDestination = BottomNavItem.Profile.route, modifier = Modifier.padding(padding)) {
         composable(BottomNavItem.Profile.route) {
-            ProfileScreen("hello")
+            ProfileScreen(profile)
         }
         composable(BottomNavItem.Workout.route) {
-            ProfileScreen("Workout")
+            WorkoutScreen(workouts = profile.workouts)
         }
         composable(BottomNavItem.Exercise.route) {
-            ProfileScreen("Exercise")
+            Text("Exercise Screen")
         }
     }
 }

@@ -1,12 +1,12 @@
 package org.fitness.myfitnesstrainer.api
 
+import androidx.lifecycle.MutableLiveData
 import org.fitness.myfitnesstrainer.data.remote.models.NetworkResult
 import retrofit2.HttpException
 
+
 interface ApiHandler {
-    suspend fun <T : Any> handleApi(
-        execute: suspend () -> retrofit2.Response<T>
-    ): NetworkResult<T> {
+    suspend fun <T : Any> handleApi(execute: suspend () -> retrofit2.Response<T>): NetworkResult<T> {
         return try {
             val response = execute()
             val body = response.body()
@@ -19,11 +19,10 @@ interface ApiHandler {
                     errorMsg = response.errorBody().toString()
                 )
             }
-        }catch (e: HttpException){
+        } catch (e: HttpException) {
             NetworkResult.Error(e.code(), e.message())
-        }catch (e:Throwable){
+        } catch (e: Throwable) {
             NetworkResult.Exception(e)
         }
-
     }
 }

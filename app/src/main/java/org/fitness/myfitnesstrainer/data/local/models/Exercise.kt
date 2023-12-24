@@ -1,23 +1,35 @@
 package org.fitness.myfitnesstrainer.data.local.models
 
 import android.os.Parcelable
+import androidx.compose.runtime.Immutable
 import kotlinx.parcelize.Parcelize
+
+fun unwrapSets(sets: List<List<Float>>?): List<SetModel> {
+    val result = ArrayList<SetModel>()
+
+    if (sets != null) {
+        for (set in sets) {
+            result.add(SetModel(set))
+        }
+    }
+
+    return result.toList()
+}
 
 @Parcelize
 data class ExerciseModel(
-    val name: String,
+    val __v: Int? = null,
+    val _id: String? = null,
+    val bodyPart: String,
+    var sets: List<List<Float>> = emptyList(),
+    val createdAt: String? = null,
     val description: String,
-    var sets: List<SetModel> = emptyList(),
-) : Parcelable {
-
-    fun addSet(set: SetModel) {
-        val mSets = mutableListOf<SetModel>()
-
-        for (set in sets) {
-            mSets.add(set)
-        }
+    val name: String,
+    val updatedAt: String? = null
+): Parcelable {
+    fun addSet(set: List<Float>) {
+        val mSets = this.sets.toMutableList()
         mSets.add(set)
-
         this.sets = mSets.toList()
     }
 
@@ -29,10 +41,8 @@ data class ExerciseModel(
         var volume: Float = 0F
 
         for(set in sets) {
-            volume += set.getVolume()
+            volume += set.sum()
         }
-
         return volume
     }
-
 }

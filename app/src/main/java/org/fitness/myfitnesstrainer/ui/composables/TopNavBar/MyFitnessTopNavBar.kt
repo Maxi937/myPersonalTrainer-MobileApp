@@ -9,6 +9,8 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonColors
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MediumTopAppBar
@@ -28,12 +30,12 @@ import org.fitness.myfitnesstrainer.auth.AuthManager
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MyFitnessTopNavBar(authManager: AuthManager) {
+fun MyFitnessTopNavBar(logout: () -> Unit) {
     var expanded by remember { mutableStateOf(false) }
 
     TopAppBar(
         colors = TopAppBarDefaults.largeTopAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
+            containerColor = MaterialTheme.colorScheme.primary,
             titleContentColor = MaterialTheme.colorScheme.primary,
         ),
         title = {
@@ -49,7 +51,7 @@ fun MyFitnessTopNavBar(authManager: AuthManager) {
                     imageVector = Icons.Filled.Menu,
                     contentDescription = "Localized description"
                 )
-                MyFitnessTopBarMenu(authManager, expanded = expanded,) {
+                MyFitnessTopBarMenu(logout, expanded = expanded,) {
                     expanded = false
                 }
             }

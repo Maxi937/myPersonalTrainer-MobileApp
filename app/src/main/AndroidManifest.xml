@@ -37,9 +37,10 @@
         </service>
 
         <activity android:name=".auth.AuthenticatorActivity" android:label="MyFitnessTrainer" android:theme="@style/Theme.SplashScreen.MySplash"/>
+        <activity android:name=".ui.activities.workoutActivity.WorkoutActivity" android:label="MyFitnessTrainer" android:theme="@style/Theme.SplashScreen.MySplash" android:exported="true"/>
 
         <activity
-            android:name=".ui.activities.myfitnessactivity.MyFitnessActivity"
+            android:name=".ui.activities.mainActivity.MyFitnessActivity"
             android:exported="true"
             android:theme="@style/Theme.SplashScreen.MySplash">
             <intent-filter>

@@ -20,10 +20,6 @@ class AuthManager(activity: Activity) {
         MutableLiveData<Boolean>(false)
     }
 
-//    val User: MutableLiveData<xProfile> by lazy {
-//        MutableLiveData<xProfile>(null)
-//    }
-
     private fun addTokenToClient(token: String) {
         showMessage("Token Added to Client: $token")
         MyFitnessClient.TOKEN = token
@@ -85,7 +81,13 @@ class AuthManager(activity: Activity) {
     fun getTokenForAccountCreateIfNeeded() {
         Timber.i("GetTokenForAccountCreateIfNeeded Started")
         val future = mAccountManager.getAuthTokenByFeatures(
-            AccountGeneral.ACCOUNT_TYPE, AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS, null, activity, null, null, { future ->
+            AccountGeneral.ACCOUNT_TYPE,
+            AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS,
+            null,
+            activity,
+            null,
+            null,
+            { future ->
                 var bnd: Bundle? = null
 
                 try {
@@ -100,7 +102,8 @@ class AuthManager(activity: Activity) {
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
-            }, null
+            },
+            null
         )
     }
 
@@ -129,13 +132,21 @@ class AuthManager(activity: Activity) {
         }
     }
 
-    private fun invalidateAuthToken(account: Account, authTokenType: String) {
-        mAccountManager.getAuthToken(
-            account, authTokenType, null, activity, { future ->
-                val bnd = future.result
-                val authtoken = bnd.getString(AccountManager.KEY_AUTHTOKEN)
-                mAccountManager.invalidateAuthToken(account.type, authtoken)
-            }, null
-        )
+    fun invalidateAuthToken() {
+        val account: Account? = getAccount()
+
+        if (account != null) {
+            mAccountManager.getAuthToken(
+                account, AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS, null, activity, { future ->
+                    val bnd = future.result
+                    val authtoken = bnd.getString(AccountManager.KEY_AUTHTOKEN)
+                    if (authtoken != null) {
+                        mAccountManager.invalidateAuthToken(account.type, authtoken)
+                    }
+                }, null
+            )
+
+        }
+
     }
 }
