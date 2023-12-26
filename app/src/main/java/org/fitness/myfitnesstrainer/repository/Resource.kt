@@ -1,14 +1,21 @@
 package org.fitness.myfitnesstrainer.repository
 
 import androidx.lifecycle.MutableLiveData
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.fitness.myfitnesstrainer.api.MyFitnessClient
+import org.fitness.myfitnesstrainer.data.remote.models.NetworkResult
+import org.fitness.myfitnesstrainer.data.remote.models.apiProfile
 
 class Resource<T : Any>(nothing: Nothing?) : MutableLiveData<ResourceStatus<T>>() {
+
     fun isLoading() {
         postValue(ResourceStatus.IsLoading())
     }
 
-    fun isError(errorMsg: String? = null) {
-        postValue(ResourceStatus.IsError(errorMsg = errorMsg))
+    fun isError(code: Int, errorMsg: String?) {
+        postValue(ResourceStatus.IsError(code=code, errorMsg=errorMsg))
     }
 
     override fun postValue(value: ResourceStatus<T>?) {
@@ -16,6 +23,10 @@ class Resource<T : Any>(nothing: Nothing?) : MutableLiveData<ResourceStatus<T>>(
     }
 
     fun isSuccess(data: T) {
+        postValue(ResourceStatus.IsSuccess(data))
+    }
+
+    fun update(data: T) {
         postValue(ResourceStatus.IsSuccess(data))
     }
 

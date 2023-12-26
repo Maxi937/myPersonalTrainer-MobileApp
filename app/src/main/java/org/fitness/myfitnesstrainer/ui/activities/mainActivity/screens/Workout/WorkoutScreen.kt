@@ -22,6 +22,7 @@ import org.fitness.myfitnesstrainer.ui.composables.Screen.Screen
 import org.fitness.myfitnesstrainer.ui.composables.MyFitnessText.MyFitnessH3Subscript1
 import org.fitness.myfitnesstrainer.ui.preview.ProfilePreviewParameterProvider
 import org.fitness.myfitnesstrainer.ui.theme.MyFitnessTrainerTheme
+import java.util.Date
 
 
 @Composable
@@ -46,11 +47,11 @@ fun Workout(workout: WorkoutModel) {
     }
 }
 
-fun checkHistoryForLatest(history: List<String>): String {
+fun checkHistoryForLatest(history: List<Date>): String {
     return if (history.isEmpty()) {
         "Not Performed Yet"
     } else {
-        history[0]
+        history[0].toString()
     }
 }
 

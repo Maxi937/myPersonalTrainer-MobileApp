@@ -7,11 +7,16 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.fitness.myfitnesstrainer.api.MyFitnessClient
 import timber.log.Timber
+import kotlin.concurrent.thread
 
 
 class AuthManager(activity: Activity) {
+    private val scope = CoroutineScope(Dispatchers.IO)
     private var activity = activity
     private var mAccountManager: AccountManager = AccountManager.get(activity)
     private var loggedInAccountName: String? = null
@@ -21,7 +26,6 @@ class AuthManager(activity: Activity) {
     }
 
     private fun addTokenToClient(token: String) {
-        showMessage("Token Added to Client: $token")
         MyFitnessClient.TOKEN = token
     }
 
@@ -69,12 +73,11 @@ class AuthManager(activity: Activity) {
                     if (authtoken != null) {
                         addTokenToClient(authtoken)
                         loggedIn.postValue(true)
+                        showMessage("getAuthToken -> Got Auth Token: $authtoken")
                     }
                 },
                 null
             )
-        } else {
-            addAccount()
         }
     }
 
@@ -98,6 +101,7 @@ class AuthManager(activity: Activity) {
                         addTokenToClient(authtoken)
                         loggedInAccountName = bnd!!.getString(AccountManager.KEY_ACCOUNT_NAME)
                         loggedIn.postValue(true)
+                        showMessage("getTokenForAccountCreateIfNeeded -> Got Auth Token: $authtoken")
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
@@ -137,6 +141,11 @@ class AuthManager(activity: Activity) {
         }
     }
 
+    fun getNewAuthToken() {
+        invalidateAuthToken()
+        getAuthToken()
+    }
+
     private fun invalidateAuthToken() {
         val account: Account? = getAccount()
 
@@ -152,6 +161,5 @@ class AuthManager(activity: Activity) {
             )
 
         }
-
     }
 }

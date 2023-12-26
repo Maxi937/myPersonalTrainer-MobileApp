@@ -2,6 +2,7 @@ package org.fitness.myfitnesstrainer.data.local.models
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import java.util.Date
 
 @Parcelize
 data class WorkoutModel(
@@ -12,7 +13,7 @@ data class WorkoutModel(
     val exercises: MutableList<ExerciseModel> = mutableListOf(),
     val name: String,
     val updatedAt: String? = null,
-    val history: List<String> = emptyList(),
+    val history: List<Date> = emptyList(),
     val date: String? = null
 ) : Parcelable {
     fun getVolume(): Float {

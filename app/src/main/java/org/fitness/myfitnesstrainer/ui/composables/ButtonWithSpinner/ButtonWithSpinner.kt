@@ -23,8 +23,8 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun ButtonWithSpinner(modifier: Modifier = Modifier, buttonText: String, showLoader: Boolean = false, onClick: () -> Unit) {
     Button(modifier = modifier.height(48.dp), onClick = onClick, colors = ButtonDefaults.buttonColors(Color.Magenta)) {
-        AnimatedContent(targetState = showLoader, label = "btn",       transitionSpec = {
-            // Compare the incoming number with the previous number.
+        AnimatedContent(targetState = showLoader, label = "btn",
+            transitionSpec = {
             if (targetState > initialState) {
                 (slideInVertically { height -> height } + fadeIn()).togetherWith(slideOutVertically { height -> -height } + fadeOut())
             } else {

@@ -4,7 +4,6 @@ package org.fitness.myfitnesstrainer.ui.activities.mainActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import org.fitness.myfitnesstrainer.data.local.models.Profile
-import org.fitness.myfitnesstrainer.repository.MyFitnessProfileRepository
 import org.fitness.myfitnesstrainer.repository.Resource
 
 //class LayoutViewModelFactory(private val myFitnessProfileRepository: MyFitnessProfileRepository) :
