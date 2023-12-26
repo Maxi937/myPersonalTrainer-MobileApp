@@ -1,5 +1,9 @@
 package org.fitness.myfitnesstrainer.auth
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import org.fitness.myfitnesstrainer.api.MyFitnessClient
 import org.fitness.myfitnesstrainer.data.local.models.AuthRequest
@@ -7,6 +11,7 @@ import org.fitness.myfitnesstrainer.data.remote.models.NetworkResult
 import timber.log.Timber
 
 object AccountGeneral {
+    private val scope = CoroutineScope(Dispatchers.IO)
     const val ACCOUNT_TYPE = "org.fitness.myfitnesstrainer.auth"
     const val ACCOUNT_NAME = "myfitnesstrainer"
     const val AUTHTOKEN_TYPE_FULL_ACCESS = "Full access"
@@ -19,7 +24,7 @@ object AccountGeneral {
         var token: String = runBlocking {
             when (val response = MyFitnessClient.service.authenticate(authRequest)) {
                 is NetworkResult.Success -> return@runBlocking response.data.token
-                is NetworkResult.Error ->  return@runBlocking ""
+                is NetworkResult.Error -> return@runBlocking ""
                 is NetworkResult.Exception -> return@runBlocking throw Exception("Something went wrong")
             }
         }

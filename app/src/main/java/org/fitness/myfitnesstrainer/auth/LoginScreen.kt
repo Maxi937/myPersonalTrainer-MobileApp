@@ -31,6 +31,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import org.fitness.myfitnesstrainer.R
 import org.fitness.myfitnesstrainer.ui.composables.ButtonWithSpinner.ButtonWithSpinner
 
@@ -94,7 +95,7 @@ fun LoginScreen(
                 isAuthInProgress
             ) {
                 isAuthInProgress = true
-                coroutineScope.async {
+                coroutineScope.launch {
                     onSubmit(email, password)
                     isAuthInProgress = false
                 }
@@ -110,11 +111,3 @@ fun LoginScreen(
         }
     }
 }
-
-//@Preview(showBackground = true)
-//@Composable
-//fun GreetingPreview() {
-//    MyFitnessTrainerTheme {
-//        LoginScreen()
-//    }
-//}

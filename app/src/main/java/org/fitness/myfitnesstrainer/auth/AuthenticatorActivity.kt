@@ -10,11 +10,14 @@ import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material3.Surface
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import org.fitness.myfitnesstrainer.ui.theme.MyFitnessTrainerTheme
 import timber.log.Timber
 
 // AuthenticatorActivity depreciated - had to add the code from it to this app compat to make sure the response was being received from the caller
-class AuthenticatorActivity : AppCompatActivity () {
+class AuthenticatorActivity : AppCompatActivity() {
     private var mAccountManager: AccountManager? = null
     private var mAuthTokenType: String? = null
     private var mResultBundle: Bundle? = null
@@ -25,7 +28,10 @@ class AuthenticatorActivity : AppCompatActivity () {
         super.onCreate(savedInstanceState)
         installSplashScreen()
 
-        mAccountAuthenticatorResponse = intent.getParcelableExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, AccountAuthenticatorResponse::class.java);
+        mAccountAuthenticatorResponse = intent.getParcelableExtra(
+            AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE,
+            AccountAuthenticatorResponse::class.java
+        );
         mAccountAuthenticatorResponse?.onRequestContinued()
 
         mAccountManager = AccountManager.get(baseContext)
@@ -36,6 +42,7 @@ class AuthenticatorActivity : AppCompatActivity () {
             MyFitnessTrainerTheme {
                 Surface {
                     LoginScreen({ email, password ->
+                        lifecycleScope.async {
                             val intent = submit(email, password)
                             if (intent.hasExtra("KEY_ERROR_MESSAGE")) {
                                 Toast.makeText(
@@ -46,7 +53,7 @@ class AuthenticatorActivity : AppCompatActivity () {
                             } else {
                                 finishLogin(intent);
                             }
-
+                        }
                     })
                 }
             }
@@ -60,11 +67,12 @@ class AuthenticatorActivity : AppCompatActivity () {
 //        } else super.onActivityResult(requestCode, resultCode, data)
 //    }
 
+
     private fun setAccountAuthenticatorResult(result: Bundle) {
         mResultBundle = result
     }
 
-    private fun submit(email: String, password: String): Intent {
+    suspend fun submit(email: String, password: String): Intent {
         var authtoken: String? = null
         val data = Bundle()
         try {

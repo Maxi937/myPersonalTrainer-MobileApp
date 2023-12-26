@@ -78,7 +78,7 @@ class AuthManager(activity: Activity) {
         }
     }
 
-    fun getTokenForAccountCreateIfNeeded() {
+    private fun getTokenForAccountCreateIfNeeded() {
         Timber.i("GetTokenForAccountCreateIfNeeded Started")
         val future = mAccountManager.getAuthTokenByFeatures(
             AccountGeneral.ACCOUNT_TYPE,
@@ -107,6 +107,11 @@ class AuthManager(activity: Activity) {
         )
     }
 
+    fun login() {
+        invalidateAuthToken()
+        getTokenForAccountCreateIfNeeded()
+    }
+
     fun logout() {
         val account = getAccount()
 
@@ -132,7 +137,7 @@ class AuthManager(activity: Activity) {
         }
     }
 
-    fun invalidateAuthToken() {
+    private fun invalidateAuthToken() {
         val account: Account? = getAccount()
 
         if (account != null) {

@@ -11,8 +11,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun PrimaryButton(text: String, modifier: Modifier = Modifier, onClick: () -> Unit) {
+fun MyFitnessPrimaryButton(text: String, modifier: Modifier = Modifier, onClick: () -> Unit) {
     Button(modifier = modifier, contentPadding = PaddingValues(20.dp), onClick = { onClick() }, colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.tertiaryContainer)) {
+        Text(text)
+    }
+}
+@Composable
+fun MyFitnessTertiaryButton(text: String, modifier: Modifier = Modifier, onClick: () -> Unit) {
+    Button(modifier = modifier, contentPadding = PaddingValues(20.dp), onClick = { onClick() }, colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent)) {
         Text(text)
     }
 }

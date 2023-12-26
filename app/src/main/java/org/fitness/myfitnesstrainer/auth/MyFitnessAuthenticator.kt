@@ -8,9 +8,14 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class MyFitnessAuthenticator(private val mContext: Context) : AbstractAccountAuthenticator(mContext) {
+    private val scope = CoroutineScope(Dispatchers.IO)
     @Throws(NetworkErrorException::class)
     override fun addAccount(
         response: AccountAuthenticatorResponse?,

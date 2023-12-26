@@ -11,10 +11,8 @@ import timber.log.Timber
 
 class WorkoutViewModel() : ViewModel() {
     fun startWorkout(context: Context, workout: WorkoutModel) {
-
         val intent = Intent(context, WorkoutActivity::class.java)
         intent.putExtra("workout", workout)
-        Timber.i("Putting Workout: ${intent.extras}")
         context.startActivity(intent)
     }
 }

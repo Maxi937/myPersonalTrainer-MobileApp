@@ -10,6 +10,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import org.fitness.myfitnesstrainer.data.local.models.Profile
+import org.fitness.myfitnesstrainer.ui.activities.mainActivity.screens.Exercise.ExerciseScreen
 import org.fitness.myfitnesstrainer.ui.activities.mainActivity.screens.Profile.ProfileScreen
 import org.fitness.myfitnesstrainer.ui.activities.mainActivity.screens.Workout.WorkoutScreen
 import org.fitness.myfitnesstrainer.ui.composables.BottomNavBar.BottomNavItem
@@ -25,7 +26,7 @@ fun BottomNavRoutes(navController: NavHostController, padding: PaddingValues, pr
             WorkoutScreen(workouts = profile.workouts)
         }
         composable(BottomNavItem.Exercise.route) {
-            Text("Exercise Screen")
+            ExerciseScreen(exercises = profile.exercises)
         }
     }
 }

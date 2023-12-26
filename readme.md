@@ -31,7 +31,7 @@ Password: secret
 | <https://blog.devgenius.io/exploring-clean-mvvm-architecture-in-android-using-kotlin-coroutines-room-hilt-retrofit-8656e0042b10> | Structure MVVM pattern article                                                                                                         |
 | <https://github.com/philipplackner/MVVMTodoApp/>                                                                                 | MVVM Structure - Routes with navcontroller                                                                                             |
 | <https://stackoverflow.com/questions/44764800/accountauthenticatoractivity-for-appcompat>                                        | response result from authenticatorActivity not being received to called - this was reason why, had to implement funcs in my App Compat |
-
+| <https://stackoverflow.com/questions/69642441/how-to-share-a-viewmodel-between-navgraph-components-only>                         | Share view model between navigation graph                                                                                              |
 ## **Known Issues**
 - Total Volume of sets (shows up after workout completion) value is incorrect.
 - Backend is hosted on render so a first login will take some time to load - may crash the app.

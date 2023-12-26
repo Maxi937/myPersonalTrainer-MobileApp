@@ -9,7 +9,7 @@ import org.fitness.myfitnesstrainer.data.local.models.Profile
 import org.fitness.myfitnesstrainer.data.remote.models.NetworkResult
 import timber.log.Timber
 
-class MyFitnessRepository(authManager: AuthManager) {
+class MyFitnessProfileRepository(authManager: AuthManager) {
     private val scope = CoroutineScope(Dispatchers.IO)
     private val authManager = authManager
 
@@ -26,29 +26,18 @@ class MyFitnessRepository(authManager: AuthManager) {
         }
     }
 
-    fun login() {
-        authManager.invalidateAuthToken()
-        authManager.getTokenForAccountCreateIfNeeded()
-    }
-
-    fun logout() {
-        authManager.logout()
-    }
-
     private fun getProfile() {
-        Timber.i("Request Auth: ${MyFitnessClient.TOKEN}")
         profile.isLoading()
 
         scope.launch {
             when (val response = MyFitnessClient.service.getProfile()) {
                 is NetworkResult.Success -> profile.isSuccess(response.data.profile)
                 is NetworkResult.Error -> when(response.code) {
-                    401 -> login()
+                    401 -> authManager.login()
                     else -> profile.isError(response.code.toString())
                 }
                 is NetworkResult.Exception -> profile.isException(response.e)
             }
         }
-
     }
 }
