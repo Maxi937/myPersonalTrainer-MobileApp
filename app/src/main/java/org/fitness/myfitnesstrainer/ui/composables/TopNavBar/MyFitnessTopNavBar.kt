@@ -9,6 +9,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchColors
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -98,6 +100,12 @@ fun themeSwitchAction() {
 
     Switch(
         checked = state,
+        colors = SwitchDefaults.colors(
+            checkedBorderColor = MaterialTheme.colorScheme.inversePrimary,
+            checkedIconColor = MaterialTheme.colorScheme.inversePrimary,
+            disabledUncheckedIconColor = MaterialTheme.colorScheme.inversePrimary,
+            disabledUncheckedBorderColor =  MaterialTheme.colorScheme.inversePrimary
+        ),
         onCheckedChange = {
             state = it
             if (MyFitnessRepository.theme.value == DarkColorScheme) {

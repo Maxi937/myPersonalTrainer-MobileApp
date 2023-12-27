@@ -62,7 +62,7 @@ val LightColorScheme = lightColorScheme(
     secondaryContainer = Color.White,
     onSecondary = Color.White,
     onSecondaryContainer = Color.White,
-    tertiaryContainer = Color.White,
+    tertiaryContainer = lightTertiaryContainer,
     scrim = scrimDark
 )
 

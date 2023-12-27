@@ -66,7 +66,7 @@ fun ExerciseScreen(exercises: List<ExerciseModel>) {
         mutableStateOf(false)
     }
 
-    Search(searchVisible, search, "Search by Body Part")
+    Search(searchVisible, search, "Search Body Part")
 
     Screen(modifier = Modifier.padding(0.dp, 20.dp)) {
         for (exercise in viewModel.sort(exercises, sort, search.value)) {

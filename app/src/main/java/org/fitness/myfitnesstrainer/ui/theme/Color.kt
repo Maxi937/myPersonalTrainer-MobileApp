@@ -15,6 +15,8 @@ val secondaryDarkContainer = Color(0xFF252930)
 val tertiaryDarkPurple = Color(0xFD5019A7)
 val scrimDark = Color.Gray
 
+val lightTertiaryContainer = Color(0xFD55ABF7)
+
 val Purple80 = Color(0xFFD0BCFF)
 val PurpleGrey80 = Color(0xFFCCC2DC)
 val Pink80 = Color(0xFFEFB8C8)
