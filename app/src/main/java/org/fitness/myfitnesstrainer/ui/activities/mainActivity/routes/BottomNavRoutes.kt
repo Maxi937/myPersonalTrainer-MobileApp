@@ -40,5 +40,10 @@ fun BottomNavRoutes(navController: NavHostController, padding: PaddingValues, pr
                 navController.navigate(BottomNavItem.Exercise.route)
             }
         }
+        composable("showHistory/{workoutId}") {
+            AddExerciseScreen() {
+                navController.navigate(BottomNavItem.Exercise.route)
+            }
+        }
     }
 }

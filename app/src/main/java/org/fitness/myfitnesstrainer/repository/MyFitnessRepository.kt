@@ -12,6 +12,7 @@ import org.fitness.myfitnesstrainer.data.local.models.History
 import org.fitness.myfitnesstrainer.data.local.models.Profile
 import org.fitness.myfitnesstrainer.data.local.models.WorkoutModel
 import org.fitness.myfitnesstrainer.data.remote.models.NetworkResult
+import org.fitness.myfitnesstrainer.ui.activities.mainActivity.screens.Workout.Workout
 import org.fitness.myfitnesstrainer.ui.theme.DarkColorScheme
 import timber.log.Timber
 import java.text.SimpleDateFormat
@@ -50,6 +51,27 @@ object MyFitnessRepository {
     fun getWorkouts(): List<WorkoutModel> {
         when (val p = profile.value) {
             is ResourceStatus.IsSuccess -> return p.data.workouts
+            else -> return emptyList()
+        }
+    }
+
+    fun getWorkoutHistory(workoutId: String): List<WorkoutModel> {
+        when (val p = profile.value) {
+            is ResourceStatus.IsSuccess -> {
+                val result: MutableList<WorkoutModel> = mutableListOf()
+                val w = p.data.workouts.find { it._id == workoutId }
+                if (w != null) {
+                    result.add(w)
+                    for (h in w.history) {
+                        var workout = WorkoutModel(name = w.name, exercises = h.exercises, createdAt = h.createdAt, history = listOf(
+                            History(createdAt = h.createdAt)
+                        ))
+                        result.add(workout)
+                    }
+                }
+                return result
+            }
+
             else -> return emptyList()
         }
     }
@@ -168,8 +190,7 @@ object MyFitnessRepository {
     }
 
     private fun completeProfileWorkout(
-        workout: WorkoutModel,
-        exercisesCompleted: List<ExerciseModel>
+        workout: WorkoutModel, exercisesCompleted: List<ExerciseModel>
     ) {
         val date = SimpleDateFormat("dd-MMM-YY").format(Date())
         val thistory: History = History(exercisesCompleted, date.toString())

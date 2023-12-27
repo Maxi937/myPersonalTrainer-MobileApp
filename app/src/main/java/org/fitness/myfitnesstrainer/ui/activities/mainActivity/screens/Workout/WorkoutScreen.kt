@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -17,6 +18,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -37,9 +39,6 @@ import org.fitness.myfitnesstrainer.ui.composables.Screen.Screen
 import org.fitness.myfitnesstrainer.ui.preview.ProfilePreviewParameterProvider
 import org.fitness.myfitnesstrainer.ui.theme.MyFitnessTrainerTheme
 import timber.log.Timber
-import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.LocalDateTime.parse
 import java.time.format.DateTimeFormatter
 import java.util.Date
@@ -49,32 +48,59 @@ import java.util.Date
 fun WorkoutScreen(workouts: List<WorkoutModel>) {
     val viewModel: WorkoutViewModel = viewModel()
 
-    for (workout in workouts) {
-        Timber.i(workouts.toString())
-    }
-
+    val showHistory by viewModel.showHistory.observeAsState()
 
     Screen {
-        for (workout in workouts) {
-            Workout(workout)
+        if (showHistory != null) {
+            var history = viewModel.getHistory(showHistory!!)
+            ShowHistory(workouts = history)
+        } else {
+            ShowWorkouts(workouts)
         }
     }
 }
 
 @Composable
-fun Workout(workout: WorkoutModel) {
+fun ShowWorkouts(workouts: List<WorkoutModel>) {
+    for (workout in workouts) {
+        Workout(workout)
+    }
+}
+
+@Composable
+fun ShowHistory(workouts: List<WorkoutModel>) {
+    val viewModel: WorkoutViewModel = viewModel()
+    Workout(workout = workouts[0], showMenuActions = false)
+    Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
+        IconButton(onClick = { viewModel.showHistory.postValue(null)}) {
+            Icon(
+                imageVector = Icons.Filled.KeyboardArrowDown,
+                contentDescription = "Localized description"
+            )
+        }
+    }
+    for (workout in workouts.drop(1)) {
+        Workout(workout = workout, showMenuActions = false)
+    }
+}
+
+@Composable
+fun Workout(workout: WorkoutModel, showMenuActions: Boolean = true) {
     val viewModel: WorkoutViewModel = viewModel()
     val context = LocalContext.current
 
     MyFitnessCard(onClick = { viewModel.startWorkout(context, workout) }) {
         Row {
             MyFitnessH3Subscript1(
-                title = workout.name.capitalize(),
-                text = checkHistoryForLatest(workout.history)
+                title = workout.name.capitalize(), text = checkHistoryForLatest(workout.history)
             )
-            Row(horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()) {
-                MenuAction(workout)
+            if (showMenuActions) {
+                Row(horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()) {
+                    MenuAction(workout)
+                }
+
             }
+
         }
         Exercises(workout.exercises)
     }
@@ -86,8 +112,7 @@ fun MenuAction(workout: WorkoutModel) {
 
     IconButton(onClick = { expanded = !expanded }) {
         Icon(
-            imageVector = Icons.Filled.MoreVert,
-            contentDescription = "Localized description"
+            imageVector = Icons.Filled.MoreVert, contentDescription = "Localized description"
         )
         WorkoutMenu(expanded = expanded, workout) {
             expanded = false
@@ -96,7 +121,11 @@ fun MenuAction(workout: WorkoutModel) {
 }
 
 @Composable
-fun WorkoutMenu(expanded: Boolean, workout: WorkoutModel, setExpanded: () -> Unit) {
+fun WorkoutMenu(
+    expanded: Boolean,
+    workout: WorkoutModel,
+    setExpanded: () -> Unit
+) {
     val viewModel: WorkoutViewModel = viewModel()
 
     DropdownMenu(
@@ -104,30 +133,30 @@ fun WorkoutMenu(expanded: Boolean, workout: WorkoutModel, setExpanded: () -> Uni
         onDismissRequest = { setExpanded() },
         modifier = Modifier.background(MaterialTheme.colorScheme.tertiaryContainer)
     ) {
-        DropdownMenuItem(
-            text = {
-                Text(
-                    "Edit Workout",
-                    modifier = Modifier.fillMaxWidth()
-                )
-            },
-            onClick = {
-                setExpanded()
-                viewModel.editWorkout(workout)
-            }
-        )
-        DropdownMenuItem(
-            text = {
-                Text(
-                    "Delete Workout",
-                    modifier = Modifier.fillMaxWidth()
-                )
-            },
-            onClick = {
-                setExpanded()
-                viewModel.deleteWorkout(workout)
-            }
-        )
+        DropdownMenuItem(text = {
+            Text(
+                "Show History", modifier = Modifier.fillMaxWidth()
+            )
+        }, onClick = {
+            setExpanded()
+            viewModel.showHistory.postValue(workout._id.toString())
+        })
+        DropdownMenuItem(text = {
+            Text(
+                "Edit Workout", modifier = Modifier.fillMaxWidth()
+            )
+        }, onClick = {
+            setExpanded()
+            viewModel.editWorkout(workout)
+        })
+        DropdownMenuItem(text = {
+            Text(
+                "Delete Workout", modifier = Modifier.fillMaxWidth()
+            )
+        }, onClick = {
+            setExpanded()
+            viewModel.deleteWorkout(workout)
+        })
     }
 }
 
@@ -141,7 +170,6 @@ fun checkHistoryForLatest(history: List<History>): String {
     }
     return "Not Performed Yet"
 }
-
 
 @Composable
 fun Exercises(exercises: List<ExerciseModel>) {

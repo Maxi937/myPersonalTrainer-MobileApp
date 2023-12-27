@@ -6,6 +6,7 @@ import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
+import java.util.Locale
 
 class ProfileViewModel: ViewModel() {
     val myFitnessRepository: MyFitnessRepository = MyFitnessRepository
@@ -28,7 +29,7 @@ class ProfileViewModel: ViewModel() {
     }
 
     fun getNumberOfWorkoutsCompletedThisWeek(): String {
-        val format: SimpleDateFormat = SimpleDateFormat("dd-MMM-YYYY")
+        val format: SimpleDateFormat = SimpleDateFormat("dd-MMM-YYYY", Locale.ENGLISH)
         val c: Calendar = Calendar.getInstance()
         c.time = Date()
         val currentWeek = c.get(Calendar.WEEK_OF_YEAR)
