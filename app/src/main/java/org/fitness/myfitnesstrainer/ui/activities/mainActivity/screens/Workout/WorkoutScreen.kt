@@ -72,7 +72,7 @@ fun WorkoutScreen(workouts: List<WorkoutModel>) {
         mutableStateOf(false)
     }
 
-    Search(searchVisible, search, "Search by Name")
+    Search(searchVisible, search)
     Screen {
         when {
             showHistory != null -> ShowHistory(workouts = viewModel.getHistory(showHistory!!))
@@ -89,6 +89,7 @@ fun WorkoutScreen(workouts: List<WorkoutModel>) {
 fun ShowWorkouts(workouts: List<WorkoutModel>) {
     for (workout in workouts) {
         Workout(workout)
+        Spacer(Modifier.size(10.dp))
     }
 }
 
