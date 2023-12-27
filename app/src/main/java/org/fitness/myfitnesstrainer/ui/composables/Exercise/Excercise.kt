@@ -18,9 +18,11 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import org.fitness.myfitnesstrainer.data.local.models.ExerciseModel
 import org.fitness.myfitnesstrainer.ui.composables.MyFitnessText.MyFitnessH3Subscript1
@@ -28,7 +30,9 @@ import org.fitness.myfitnesstrainer.ui.composables.MyFitnessText.MyFitnessH3Subs
 @Composable
 fun ExerciseItem(exercise: ExerciseModel, padding: PaddingValues = PaddingValues(1.dp), action: @Composable() (() -> Unit)? = null) {
     Card(
-        modifier = Modifier.fillMaxWidth().then(Modifier.padding(padding)),
+        modifier = Modifier
+            .fillMaxWidth()
+            .then(Modifier.padding(padding)),
         elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
     ) {
@@ -44,11 +48,30 @@ fun ExerciseItem(exercise: ExerciseModel, padding: PaddingValues = PaddingValues
                 Row(horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()) {
                     action()
                 }
-
             }
 
         }
     }
+}
+
+@Composable
+fun Sets(sets: List<List<Float>>) {
+    for (set in sets) {
+        SetsItem(set = set)
+        Spacer(Modifier.size(4.dp))
+    }
+}
+
+@Composable
+fun SetsItem(set: List<Float>) {
+    Row {
+        Text("${set.size}", textAlign = TextAlign.Center)
+        Spacer(modifier = Modifier.size(5.dp))
+        Text("\uD835\uDE6D", textAlign = TextAlign.Center)
+        Spacer(modifier = Modifier.size(5.dp))
+        Text("${set[0]} Kg")
+    }
+
 }
 
 @Composable

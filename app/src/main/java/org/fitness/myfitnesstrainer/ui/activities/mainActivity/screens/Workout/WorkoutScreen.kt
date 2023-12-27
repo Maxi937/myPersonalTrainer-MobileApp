@@ -44,6 +44,7 @@ import org.fitness.myfitnesstrainer.data.local.models.Profile
 import org.fitness.myfitnesstrainer.data.local.models.WorkoutModel
 import org.fitness.myfitnesstrainer.ui.activities.mainActivity.screens.Exercise.SwipeToDeleteExercise
 import org.fitness.myfitnesstrainer.ui.composables.Exercise.ExerciseItem
+import org.fitness.myfitnesstrainer.ui.composables.Exercise.Sets
 import org.fitness.myfitnesstrainer.ui.composables.MyFitnessCard.MyFitnessCard
 import org.fitness.myfitnesstrainer.ui.composables.MyFitnessText.MyFitnessH3Subscript1
 import org.fitness.myfitnesstrainer.ui.composables.Screen.Screen
@@ -262,7 +263,6 @@ fun Exercises(exercises: List<ExerciseModel>) {
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable
