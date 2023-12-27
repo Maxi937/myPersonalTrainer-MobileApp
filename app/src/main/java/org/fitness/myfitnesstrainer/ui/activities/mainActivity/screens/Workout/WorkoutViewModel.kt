@@ -11,6 +11,9 @@ import org.fitness.myfitnesstrainer.repository.MyFitnessRepository
 import org.fitness.myfitnesstrainer.ui.activities.workoutActivity.WorkoutActivity
 import org.fitness.myfitnesstrainer.ui.theme.DarkColorScheme
 import timber.log.Timber
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 
 class WorkoutViewModel() : ViewModel() {
@@ -28,6 +31,15 @@ class WorkoutViewModel() : ViewModel() {
         val intent = Intent(context, WorkoutActivity::class.java)
         intent.putExtra("workout", workout)
         context.startActivity(intent)
+    }
+
+    fun sortWorkoutsAlphabetically(workouts: List<WorkoutModel>): List<WorkoutModel> {
+        return workouts.sortedBy { it.name }
+    }
+
+    fun sortWorkoutsByMostRecent(workouts: List<WorkoutModel>): List<WorkoutModel> {
+        val format: SimpleDateFormat = SimpleDateFormat("dd-MMM-YYYY", Locale.ENGLISH)
+        return workouts.sortedBy { format.parse(it.createdAt) }
     }
 
     fun updateWorkout(workout: WorkoutModel) {

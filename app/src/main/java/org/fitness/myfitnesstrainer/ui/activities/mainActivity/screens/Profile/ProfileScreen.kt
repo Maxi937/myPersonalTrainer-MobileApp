@@ -37,7 +37,7 @@ fun ProfileScreen(profile: Profile) {
             Column {
                 Text(text = profile.userDetails.fname)
                 Spacer(modifier = Modifier.size(3.dp))
-                MyFitnessSubscript1(text = "${viewModel.getNumberOfWorkoutsCompletedThisWeek()}")
+                MyFitnessSubscript1(text = "${viewModel.getNumberOfWorkoutsCompleted()}")
             }
         }
     }

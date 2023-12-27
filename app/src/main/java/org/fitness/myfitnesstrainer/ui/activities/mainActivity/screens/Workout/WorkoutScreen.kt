@@ -60,6 +60,7 @@ import java.util.Date
 fun WorkoutScreen(workouts: List<WorkoutModel>) {
     val viewModel: WorkoutViewModel = viewModel()
 
+    val sort by remember { mutableStateOf(false)}
     val showHistory by viewModel.showHistory.observeAsState()
     val editWorkout by viewModel.editWorkout.observeAsState()
 
@@ -68,13 +69,9 @@ fun WorkoutScreen(workouts: List<WorkoutModel>) {
             showHistory != null -> ShowHistory(workouts = viewModel.getHistory(showHistory!!))
             editWorkout != null -> {
                 val workout = viewModel.getWorkoutById(editWorkout!!)
-                if (workout != null) {
-                    EditWorkout(workout = workout)
-                }
-
-            }
-
-            else -> ShowWorkouts(workouts)
+                if (workout != null) { EditWorkout(workout = workout) } }
+            else ->
+                ShowWorkouts(viewModel.sortWorkoutsAlphabetically(workouts))
         }
     }
 }
