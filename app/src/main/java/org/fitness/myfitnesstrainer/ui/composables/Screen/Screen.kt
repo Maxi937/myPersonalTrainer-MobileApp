@@ -1,5 +1,6 @@
 package org.fitness.myfitnesstrainer.ui.composables.Screen
 
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,15 +12,29 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun Screen(arrangement: Arrangement.Vertical = Arrangement.Top, modifier: Modifier = Modifier, content: @Composable() () -> Unit,
-) {
-    Column(
-        modifier = Modifier
-            .padding(10.dp)
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState()).then(modifier)
-        , verticalArrangement = arrangement
-    ) {
+fun Screen(
+    scrollable: Boolean = true,
+    arrangement: Arrangement.Vertical = Arrangement.Top,
+    modifier: Modifier = Modifier,
+    bottomContent: @Composable() () -> Unit = { null },
+    content: @Composable() () -> Unit) {
+
+    val scrollableModifier = if(scrollable) { Modifier.verticalScroll(rememberScrollState()) } else { Modifier }
+
+    Column(modifier = Modifier
+        .padding(10.dp)
+        .fillMaxSize()
+        .then(scrollableModifier)
+        .then(modifier), verticalArrangement = arrangement) {
         content()
+    }
+    if (bottomContent != null) {
+        Column(modifier = Modifier
+            .padding(10.dp)
+            .fillMaxSize(),
+            verticalArrangement = Arrangement.Bottom) {
+            bottomContent()
+        }
+
     }
 }

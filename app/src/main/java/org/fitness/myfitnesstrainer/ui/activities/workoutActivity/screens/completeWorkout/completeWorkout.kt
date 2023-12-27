@@ -16,6 +16,7 @@ import org.fitness.myfitnesstrainer.data.local.models.Profile
 import org.fitness.myfitnesstrainer.data.local.models.WorkoutModel
 import org.fitness.myfitnesstrainer.ui.activities.mainActivity.screens.Workout.Exercises
 import org.fitness.myfitnesstrainer.ui.activities.mainActivity.screens.Workout.checkHistoryForLatest
+import org.fitness.myfitnesstrainer.ui.activities.workoutActivity.WorkoutActivity
 import org.fitness.myfitnesstrainer.ui.composables.MyFitnessButtons.MyFitnessPrimaryButton
 import org.fitness.myfitnesstrainer.ui.composables.MyFitnessCard.MyFitnessCard
 import org.fitness.myfitnesstrainer.ui.composables.MyFitnessText.MyFitnessH3Subscript1
@@ -25,7 +26,7 @@ import org.fitness.myfitnesstrainer.ui.theme.MyFitnessTrainerTheme
 
 @Composable
 fun CompleteWorkout(oldWorkout: WorkoutModel, newWorkout: WorkoutModel) {
-    val activity = (LocalContext.current as? Activity)
+    val activity = (LocalContext.current as? WorkoutActivity)
 
     Screen {
         Column(
@@ -44,6 +45,7 @@ fun CompleteWorkout(oldWorkout: WorkoutModel, newWorkout: WorkoutModel) {
         verticalArrangement = Arrangement.Bottom
     ) {
         MyFitnessPrimaryButton(text = "Finish Workout", modifier = Modifier.fillMaxWidth()) {
+            activity?.myFitnessRepository?.completeWorkout(oldWorkout, newWorkout.exercises)
             activity?.finish()
         }
     }

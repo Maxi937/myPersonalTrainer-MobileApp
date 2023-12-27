@@ -19,8 +19,7 @@ fun MyFitnessTopBarMenu(logout: () -> Unit, expanded: Boolean, setExpanded: () -
     DropdownMenu(
         expanded = expanded,
         onDismissRequest = { setExpanded() },
-        modifier = Modifier
-            .background(MaterialTheme.colorScheme.tertiaryContainer)
+        modifier = Modifier.background(MaterialTheme.colorScheme.tertiaryContainer)
     ) {
         DropdownMenuItem(
             text = { Text("Logout", textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth()) },

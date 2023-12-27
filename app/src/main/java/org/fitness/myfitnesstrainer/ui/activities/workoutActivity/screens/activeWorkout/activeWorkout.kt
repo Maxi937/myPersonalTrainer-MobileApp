@@ -154,7 +154,7 @@ fun Control(text: String, modifier: Modifier = Modifier, onClick: () -> Unit) {
 @Composable
 fun WorkoutActivityTopBar(onClick: () -> Unit) {
     TopAppBar(
-        title = {""},
+        title = {"My Fitness Trainer"},
         colors = TopAppBarDefaults.largeTopAppBarColors(
             containerColor = MaterialTheme.colorScheme.primary,
             titleContentColor = MaterialTheme.colorScheme.primary,

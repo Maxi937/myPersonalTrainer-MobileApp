@@ -10,11 +10,10 @@ data class WorkoutModel(
     val _id: String? = null,
     val createdAt: String? = null,
     val createdBy: String? = null,
-    val exercises: MutableList<ExerciseModel> = mutableListOf(),
+    val exercises: List<ExerciseModel> = mutableListOf(),
     val name: String,
     val updatedAt: String? = null,
-    val history: List<Date> = emptyList(),
-    val date: String? = null
+    val history: List<History> = emptyList(),
 ) : Parcelable {
     fun getVolume(): Float {
         var volume: Float = 0f
@@ -23,10 +22,6 @@ data class WorkoutModel(
             volume += exercise.getVolume()
         }
         return volume
-    }
-
-    fun addExercise(exercise: ExerciseModel) {
-        this.exercises.add(exercise)
     }
 }
 

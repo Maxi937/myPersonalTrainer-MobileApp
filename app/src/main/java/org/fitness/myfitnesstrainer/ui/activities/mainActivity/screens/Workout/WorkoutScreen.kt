@@ -1,12 +1,25 @@
 package org.fitness.myfitnesstrainer.ui.activities.mainActivity.screens.Workout
 
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
@@ -15,19 +28,31 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import org.fitness.myfitnesstrainer.data.local.models.ExerciseModel
+import org.fitness.myfitnesstrainer.data.local.models.History
 import org.fitness.myfitnesstrainer.data.local.models.Profile
 import org.fitness.myfitnesstrainer.data.local.models.WorkoutModel
 import org.fitness.myfitnesstrainer.ui.composables.MyFitnessCard.MyFitnessCard
-import org.fitness.myfitnesstrainer.ui.composables.Screen.Screen
 import org.fitness.myfitnesstrainer.ui.composables.MyFitnessText.MyFitnessH3Subscript1
+import org.fitness.myfitnesstrainer.ui.composables.Screen.Screen
 import org.fitness.myfitnesstrainer.ui.preview.ProfilePreviewParameterProvider
 import org.fitness.myfitnesstrainer.ui.theme.MyFitnessTrainerTheme
+import timber.log.Timber
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalDateTime.parse
+import java.time.format.DateTimeFormatter
 import java.util.Date
 
 
 @Composable
 fun WorkoutScreen(workouts: List<WorkoutModel>) {
     val viewModel: WorkoutViewModel = viewModel()
+
+    for (workout in workouts) {
+        Timber.i(workouts.toString())
+    }
+
 
     Screen {
         for (workout in workouts) {
@@ -41,19 +66,82 @@ fun Workout(workout: WorkoutModel) {
     val viewModel: WorkoutViewModel = viewModel()
     val context = LocalContext.current
 
-    MyFitnessCard(onClick = { viewModel.startWorkout(context, workout) } ) {
-        MyFitnessH3Subscript1(title = workout.name, text = checkHistoryForLatest(workout.history))
+    MyFitnessCard(onClick = { viewModel.startWorkout(context, workout) }) {
+        Row {
+            MyFitnessH3Subscript1(
+                title = workout.name.capitalize(),
+                text = checkHistoryForLatest(workout.history)
+            )
+            Row(horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()) {
+                MenuAction(workout)
+            }
+        }
         Exercises(workout.exercises)
     }
 }
 
-fun checkHistoryForLatest(history: List<Date>): String {
-    return if (history.isEmpty()) {
-        "Not Performed Yet"
-    } else {
-        history[0].toString()
+@Composable
+fun MenuAction(workout: WorkoutModel) {
+    var expanded by remember { mutableStateOf(false) }
+
+    IconButton(onClick = { expanded = !expanded }) {
+        Icon(
+            imageVector = Icons.Filled.MoreVert,
+            contentDescription = "Localized description"
+        )
+        WorkoutMenu(expanded = expanded, workout) {
+            expanded = false
+        }
     }
 }
+
+@Composable
+fun WorkoutMenu(expanded: Boolean, workout: WorkoutModel, setExpanded: () -> Unit) {
+    val viewModel: WorkoutViewModel = viewModel()
+
+    DropdownMenu(
+        expanded = expanded,
+        onDismissRequest = { setExpanded() },
+        modifier = Modifier.background(MaterialTheme.colorScheme.tertiaryContainer)
+    ) {
+        DropdownMenuItem(
+            text = {
+                Text(
+                    "Edit Workout",
+                    modifier = Modifier.fillMaxWidth()
+                )
+            },
+            onClick = {
+                setExpanded()
+                viewModel.editWorkout(workout)
+            }
+        )
+        DropdownMenuItem(
+            text = {
+                Text(
+                    "Delete Workout",
+                    modifier = Modifier.fillMaxWidth()
+                )
+            },
+            onClick = {
+                setExpanded()
+                viewModel.deleteWorkout(workout)
+            }
+        )
+    }
+}
+
+fun checkHistoryForLatest(history: List<History>): String {
+    Timber.i("Searching History: $history")
+
+    if (history.isNotEmpty()) {
+        if (history.last().createdAt != null) {
+            return "Last Performed: " + history.last().createdAt.toString()
+        }
+    }
+    return "Not Performed Yet"
+}
+
 
 @Composable
 fun Exercises(exercises: List<ExerciseModel>) {

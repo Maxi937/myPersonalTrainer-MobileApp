@@ -3,6 +3,7 @@ package org.fitness.myfitnesstrainer.ui.theme
 import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.darkColorScheme
@@ -11,6 +12,10 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
@@ -22,15 +27,17 @@ import com.google.android.material.color.utilities.MaterialDynamicColors.onPrima
 import com.google.android.material.color.utilities.MaterialDynamicColors.onSecondary
 import com.google.android.material.color.utilities.MaterialDynamicColors.onSurface
 import com.google.android.material.color.utilities.MaterialDynamicColors.primaryInverse
+import org.fitness.myfitnesstrainer.repository.MyFitnessRepository
+import timber.log.Timber
 
-private val DarkColorScheme = darkColorScheme(
+val DarkColorScheme = darkColorScheme(
     background = surfaceBlack,
     surface = surfaceBlack,
     onSurface = surfaceBlack,
-    outline = surfaceWhite,
+    outline = Color.White,
     primary = primaryDark,
     onPrimary = Color.White,
-    inversePrimary = surfaceWhite,
+    inversePrimary = Color.White,
     primaryContainer = primaryDarkContainer,
     secondary = primaryDarkGold,
     secondaryContainer = secondaryDarkContainer,
@@ -41,40 +48,45 @@ private val DarkColorScheme = darkColorScheme(
     scrim = scrimDark
 )
 
-private val LightColorScheme = lightColorScheme(
-    primary = surfaceWhite,
-    secondary = surfaceWhite,
-    tertiary = surfaceWhite,
-    background = surfaceWhite,
-    surface = surfaceWhite,
-    outline = Color.Magenta
+val LightColorScheme = lightColorScheme(
+    primary = primaryLight,
+    secondary = primaryLight,
+    tertiary = Color.Black,
+    background = surfaceLight,
+    surface = surfaceLight,
+    outline = Color.Black,
+    onSurface = surfaceBlack,
+    onPrimary = Color.White,
+    inversePrimary = Color.Black,
+    primaryContainer = Color.White,
+    secondaryContainer = Color.White,
+    onSecondary = Color.White,
+    onSecondaryContainer = Color.White,
+    tertiaryContainer = Color.White,
+    scrim = scrimDark
 )
 
 @Composable
-fun MyFitnessTrainerTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = false,
-    content: @Composable () -> Unit
-) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
+fun MyFitnessTrainerTheme(content: @Composable () -> Unit) {
+    val theme = MyFitnessRepository.theme.observeAsState()
 
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
-    }
+    Timber.i("Theme: ${theme.value}")
+
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.primary.toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
+            if (theme.value != null) {
+                window.statusBarColor = theme.value!!.primary.toArgb()
+            } else {
+                window.statusBarColor = Color.Black.toArgb()
+            }
+            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars =
+                (theme.value == DarkColorScheme)
         }
     }
 
-    val textColor = when (darkTheme) {
+    val textColor = when (theme.value == DarkColorScheme) {
         true -> {
             Color.White
 
@@ -86,7 +98,11 @@ fun MyFitnessTrainerTheme(
     }
 
     MaterialTheme(
-        colorScheme = colorScheme,
+        colorScheme = if (theme.value != null) {
+            theme.value!!
+        } else {
+            DarkColorScheme
+        },
         typography = Typography,
         content = {
             ProvideTextStyle(

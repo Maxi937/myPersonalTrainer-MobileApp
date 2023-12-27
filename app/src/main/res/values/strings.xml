@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">MyFitnessTrainer</string>
     <string name="auth_account_type">org.fitness.myfitnesstrainer.auth</string>
-    <string name="auth_account_label">MyFitnessTrainer</string>
+    <string name="auth_account_label">My Fitness Trainer</string>
     <string name="activity_dashboard">Profile</string>
     <string name="activity_history">History</string>
     <string name="activity_workout">Workout</string>

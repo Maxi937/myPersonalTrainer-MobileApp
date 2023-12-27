@@ -26,8 +26,7 @@ fun getPreviewProfile() : Profile {
     val exercises = listOf(squat, deadlift, benchPress, shoulderPress, lateralRaise)
     val workouts = listOf(workoutA, workoutB, workoutC)
 
-    val history: MutableList<WorkoutModel> = mutableListOf<WorkoutModel>()
     val userDetails = UserDetails("preview@email.com", "Mr. Preview", "Previewer")
 
-    return Profile(exercises, workouts, history, userDetails)
+    return Profile(exercises, workouts, userDetails)
 }

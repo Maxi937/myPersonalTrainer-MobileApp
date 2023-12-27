@@ -4,8 +4,7 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class Profile(
+data class History(
     val exercises: List<ExerciseModel> = emptyList(),
-    val workouts: List<WorkoutModel> = emptyList(),
-    val userDetails: UserDetails = UserDetails()
+    val createdAt: String? = null
 ) : Parcelable

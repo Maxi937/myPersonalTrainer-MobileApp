@@ -1,5 +1,6 @@
 package org.fitness.myfitnesstrainer.ui.composables.MyFitnessButtons
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.material3.Button

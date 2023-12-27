@@ -45,10 +45,13 @@ import kotlinx.coroutines.delay
 import org.fitness.myfitnesstrainer.auth.AuthManager
 import org.fitness.myfitnesstrainer.data.local.models.Profile
 import org.fitness.myfitnesstrainer.repository.MyFitnessRepository
+import org.fitness.myfitnesstrainer.repository.PreferencesManager
 import org.fitness.myfitnesstrainer.repository.ResourceStatus
 import org.fitness.myfitnesstrainer.ui.activities.mainActivity.routes.BottomNavRoutes
 import org.fitness.myfitnesstrainer.ui.composables.BottomNavBar.BottomNavBar
 import org.fitness.myfitnesstrainer.ui.composables.TopNavBar.MyFitnessTopNavBar
+import org.fitness.myfitnesstrainer.ui.theme.DarkColorScheme
+import org.fitness.myfitnesstrainer.ui.theme.LightColorScheme
 import org.fitness.myfitnesstrainer.ui.theme.MyFitnessTrainerTheme
 import timber.log.Timber
 
@@ -56,16 +59,33 @@ import timber.log.Timber
 class MyFitnessActivity : ComponentActivity() {
     private lateinit var authManager: AuthManager
     private lateinit var myFitnessRepository: MyFitnessRepository
+    lateinit var sharedPrefs: PreferencesManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
         authManager = AuthManager(this)
         myFitnessRepository = MyFitnessRepository
+        sharedPrefs = PreferencesManager(this)
     }
 
     public override fun onStart() {
         super.onStart()
+
+        Timber.i(sharedPrefs.getData("theme", "dark"))
+
+        when(sharedPrefs.getData("theme", "dark")) {
+            "light" -> myFitnessRepository.theme.postValue(LightColorScheme)
+            else -> myFitnessRepository.theme.postValue(DarkColorScheme)
+        }
+
+        myFitnessRepository.theme.observeForever() {
+            if (it == DarkColorScheme) {
+                sharedPrefs.saveData("theme", "dark")
+            } else {
+                sharedPrefs.saveData("theme", "light")
+            }
+        }
 
         setContent {
             val loggedIn by authManager.loggedIn.observeAsState()

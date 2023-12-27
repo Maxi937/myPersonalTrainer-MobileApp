@@ -31,10 +31,14 @@ fun BottomNavRoutes(navController: NavHostController, padding: PaddingValues, pr
             ExerciseScreen(exercises = profile.exercises)
         }
         composable("addWorkout") {
-            AddWorkoutScreen()
+            AddWorkoutScreen() {
+                navController.navigate(BottomNavItem.Workout.route)
+            }
         }
         composable("addExercise") {
-            AddExerciseScreen()
+            AddExerciseScreen() {
+                navController.navigate(BottomNavItem.Exercise.route)
+            }
         }
     }
 }
