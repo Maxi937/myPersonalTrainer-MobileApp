@@ -9,6 +9,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.AddCircle
+import androidx.compose.material.icons.filled.Build
+import androidx.compose.material.icons.filled.Place
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -32,7 +35,8 @@ fun ExerciseItem(exercise: ExerciseModel, padding: PaddingValues = PaddingValues
         Row(modifier = Modifier.padding(10.dp)) {
             Icon(
                 imageVector = getExerciseIcon(exercise.bodyPart),
-                contentDescription = "Localized description", Modifier.size(70.dp)
+                contentDescription = "Localized description", Modifier.size(70.dp),
+                tint = MaterialTheme.colorScheme.inversePrimary
             )
             Spacer(Modifier.size(5.dp))
             MyFitnessH3Subscript1(title = exercise.name, text = exercise.bodyPart)
@@ -50,7 +54,10 @@ fun ExerciseItem(exercise: ExerciseModel, padding: PaddingValues = PaddingValues
 @Composable
 fun getExerciseIcon(bodyPart: String): ImageVector {
     return when (bodyPart.lowercase()) {
-        "arms" -> Icons.Filled.Star
+        "arm" -> Icons.Filled.Build
+        "legs" -> Icons.Filled.Place
+        "back" -> Icons.Filled.Star
+        "shoulder" -> Icons.Filled.AddCircle
         else -> Icons.Filled.AccountCircle
     }
 }
