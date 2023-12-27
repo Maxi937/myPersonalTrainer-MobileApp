@@ -1,4 +1,4 @@
-package org.fitness.myfitnesstrainer.ui.activities.mainActivity.screens.Exercise
+package org.fitness.myfitnesstrainer.ui.composables.Swipe
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
@@ -19,49 +19,15 @@ import androidx.compose.material3.SwipeToDismiss
 import androidx.compose.material3.rememberDismissState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import org.fitness.myfitnesstrainer.data.local.models.ExerciseModel
-import org.fitness.myfitnesstrainer.data.local.models.Profile
-import org.fitness.myfitnesstrainer.ui.composables.Exercise.ExerciseItem
-import org.fitness.myfitnesstrainer.ui.composables.Screen.Screen
-import org.fitness.myfitnesstrainer.ui.preview.ProfilePreviewParameterProvider
-import org.fitness.myfitnesstrainer.ui.theme.MyFitnessTrainerTheme
-
-@Composable
-fun ExerciseScreen(exercises: List<ExerciseModel>) {
-    val viewModel: ExerciseViewModel = viewModel()
-    Screen {
-        for (exercise in exercises) {
-            key(exercise._id) {
-                SwipeToDeleteExercise(exercise = exercise, onDelete = {
-                    if (exercise._id != null) {
-                        viewModel.deleteExercise(exercise)
-                    }
-                }) {
-                    ExerciseItem(exercise = exercise)
-                }
-            }
-        }
-    }
-}
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SwipeToDeleteExercise(
-    modifier: Modifier = Modifier,
-    exercise: ExerciseModel,
-    onDelete: () -> Unit,
-    dismissContent: @Composable () -> Unit
-) {
+fun SwipeToDelete(modifier: Modifier = Modifier, onDelete: () -> Unit, dismissContent: @Composable() () -> Unit) {
     Column(
         modifier = modifier
     ) {
@@ -71,8 +37,7 @@ fun SwipeToDeleteExercise(
             onDelete()
         }
 
-        SwipeToDismiss(
-            state = dismissState,
+        SwipeToDismiss(state = dismissState,
             modifier = Modifier
                 .padding(vertical = 4.dp)
                 .fillMaxWidth(),
@@ -84,8 +49,7 @@ fun SwipeToDeleteExercise(
                         DismissValue.Default -> Color.Transparent
                         DismissValue.DismissedToEnd -> Color.Green
                         DismissValue.DismissedToStart -> Color.Red
-                    },
-                    label = "trans dismiss"
+                    }, label = "trans dismiss"
                 )
                 val alignment = when (direction) {
                     DismissDirection.StartToEnd -> Alignment.CenterStart
@@ -115,21 +79,8 @@ fun SwipeToDeleteExercise(
                 }
             },
             dismissContent = {
-                ExerciseItem(exercise = exercise)
-            }
-        )
+                dismissContent
+            })
     }
+
 }
-
-
-@Preview(showBackground = true)
-@Composable
-fun ExercisePreview(@PreviewParameter(ProfilePreviewParameterProvider::class) profile: Profile) {
-    MyFitnessTrainerTheme {
-        ExerciseScreen(exercises = profile.exercises)
-    }
-}
-
-
-
-

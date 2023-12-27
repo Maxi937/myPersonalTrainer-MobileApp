@@ -34,7 +34,6 @@ import timber.log.Timber
 @Composable
 fun MyFitnessTopNavBar(navController: NavController, logout: () -> Unit) {
     var route by remember { mutableStateOf("") }
-    Timber.i(route)
 
     LaunchedEffect(navController.currentBackStackEntryFlow) {
         navController.currentBackStackEntryFlow.collect {

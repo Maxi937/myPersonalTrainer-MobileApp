@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
@@ -22,6 +23,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -40,10 +42,12 @@ import org.fitness.myfitnesstrainer.data.local.models.ExerciseModel
 import org.fitness.myfitnesstrainer.data.local.models.History
 import org.fitness.myfitnesstrainer.data.local.models.Profile
 import org.fitness.myfitnesstrainer.data.local.models.WorkoutModel
+import org.fitness.myfitnesstrainer.ui.activities.mainActivity.screens.Exercise.SwipeToDeleteExercise
 import org.fitness.myfitnesstrainer.ui.composables.Exercise.ExerciseItem
 import org.fitness.myfitnesstrainer.ui.composables.MyFitnessCard.MyFitnessCard
 import org.fitness.myfitnesstrainer.ui.composables.MyFitnessText.MyFitnessH3Subscript1
 import org.fitness.myfitnesstrainer.ui.composables.Screen.Screen
+import org.fitness.myfitnesstrainer.ui.composables.Swipe.SwipeToDelete
 import org.fitness.myfitnesstrainer.ui.preview.ProfilePreviewParameterProvider
 import org.fitness.myfitnesstrainer.ui.theme.MyFitnessTrainerTheme
 import timber.log.Timber
@@ -117,13 +121,15 @@ fun EditWorkout(workout: WorkoutModel) {
     for (exercise in workout.exercises) {
         var numberOfSets by remember { mutableIntStateOf(exercise.sets.size) }
 
-
         ExerciseItem(exercise = exercise) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
                 Text(numberOfSets.toString())
                 Row {
                     IconButton(onClick = {
-                        if(numberOfSets > 1) {
+                        if (numberOfSets > 1) {
                             exercise.sets = exercise.sets.drop(1).toMutableList()
                             numberOfSets -= 1
                         }
@@ -146,9 +152,9 @@ fun EditWorkout(workout: WorkoutModel) {
                 }
 
             }
-
         }
     }
+
 }
 
 
@@ -190,9 +196,7 @@ fun MenuAction(workout: WorkoutModel) {
 
 @Composable
 fun WorkoutMenu(
-    expanded: Boolean,
-    workout: WorkoutModel,
-    setExpanded: () -> Unit
+    expanded: Boolean, workout: WorkoutModel, setExpanded: () -> Unit
 ) {
     val viewModel: WorkoutViewModel = viewModel()
 
