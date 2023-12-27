@@ -22,3 +22,4 @@ fun MyFitnessTextInput(text: MutableState<String>, placeholder: String, maxChars
         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text)
     )
 }
+

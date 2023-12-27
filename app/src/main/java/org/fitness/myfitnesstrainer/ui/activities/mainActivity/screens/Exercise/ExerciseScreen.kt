@@ -1,36 +1,54 @@
 package org.fitness.myfitnesstrainer.ui.activities.mainActivity.screens.Exercise
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Done
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.DismissDirection
 import androidx.compose.material3.DismissValue
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SwipeToDismiss
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.rememberDismissState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.lifecycle.viewmodel.compose.viewModel
 import org.fitness.myfitnesstrainer.data.local.models.ExerciseModel
 import org.fitness.myfitnesstrainer.data.local.models.Profile
 import org.fitness.myfitnesstrainer.ui.composables.Exercise.ExerciseItem
+import org.fitness.myfitnesstrainer.ui.composables.MyFitnessInputFields.MyFitnessTextInput
+import org.fitness.myfitnesstrainer.ui.composables.MyFitnessInputFields.filterMaxChars
 import org.fitness.myfitnesstrainer.ui.composables.Screen.Screen
 import org.fitness.myfitnesstrainer.ui.preview.ProfilePreviewParameterProvider
 import org.fitness.myfitnesstrainer.ui.theme.MyFitnessTrainerTheme
@@ -38,8 +56,56 @@ import org.fitness.myfitnesstrainer.ui.theme.MyFitnessTrainerTheme
 @Composable
 fun ExerciseScreen(exercises: List<ExerciseModel>) {
     val viewModel: ExerciseViewModel = viewModel()
+    val sort by remember { mutableStateOf(false) }
+    val search = remember {
+        mutableStateOf("")
+    }
+    var searchVisible by remember {
+        mutableStateOf(false)
+    }
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .zIndex(100f)
+            .padding(5.dp)
+    ) {
+
+        AnimatedVisibility(visible = searchVisible) {
+            TextField(
+                value = search.value,
+                onValueChange = { search.value = filterMaxChars(10, it) },
+                placeholder = { Text(text = "Search Body Part", color = Color.Gray) },
+                modifier = Modifier.width(220.dp),
+                singleLine = true,
+                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text)
+            )
+        }
+
+        Row(horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()) {
+            FloatingActionButton(
+                onClick = {
+                    search.value = ""
+                    searchVisible = !searchVisible
+                },
+                containerColor = MaterialTheme.colorScheme.tertiaryContainer
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Search,
+                    contentDescription = "Localized description",
+                    tint = MaterialTheme.colorScheme.inversePrimary
+                )
+
+            }
+
+        }
+
+    }
+
+
+
     Screen {
-        for (exercise in exercises) {
+        for (exercise in viewModel.sort(exercises, sort, search.value)) {
             key(exercise._id) {
                 SwipeToDeleteExercise(exercise = exercise, onDelete = {
                     if (exercise._id != null) {
