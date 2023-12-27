@@ -6,6 +6,7 @@ import androidx.compose.material3.ColorScheme
 import androidx.core.os.bundleOf
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import org.fitness.myfitnesstrainer.data.local.models.ExerciseModel
 import org.fitness.myfitnesstrainer.data.local.models.WorkoutModel
 import org.fitness.myfitnesstrainer.repository.MyFitnessRepository
 import org.fitness.myfitnesstrainer.ui.activities.workoutActivity.WorkoutActivity
@@ -33,7 +34,22 @@ class WorkoutViewModel() : ViewModel() {
         context.startActivity(intent)
     }
 
-    fun sortWorkoutsAlphabetically(workouts: List<WorkoutModel>): List<WorkoutModel> {
+    fun sort(workouts: List<WorkoutModel>, sort: Boolean, search: String?): List<WorkoutModel> {
+        var result: List<WorkoutModel> = workouts
+
+        when(sort) {
+            true -> {}
+            else -> result = sortWorkoutsAlphabetically(result)
+        }
+
+        if(search != "" && search != null) {
+            result = result.filter { search.lowercase() in it.name.lowercase() }
+        }
+
+        return result
+    }
+
+    private fun sortWorkoutsAlphabetically(workouts: List<WorkoutModel>): List<WorkoutModel> {
         return workouts.sortedBy { it.name }
     }
 

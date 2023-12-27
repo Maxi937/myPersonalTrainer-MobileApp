@@ -47,6 +47,7 @@ import org.fitness.myfitnesstrainer.ui.composables.Exercise.ExerciseItem
 import org.fitness.myfitnesstrainer.ui.composables.MyFitnessCard.MyFitnessCard
 import org.fitness.myfitnesstrainer.ui.composables.MyFitnessText.MyFitnessH3Subscript1
 import org.fitness.myfitnesstrainer.ui.composables.Screen.Screen
+import org.fitness.myfitnesstrainer.ui.composables.Search.Search
 import org.fitness.myfitnesstrainer.ui.composables.Swipe.SwipeToDelete
 import org.fitness.myfitnesstrainer.ui.preview.ProfilePreviewParameterProvider
 import org.fitness.myfitnesstrainer.ui.theme.MyFitnessTrainerTheme
@@ -64,6 +65,14 @@ fun WorkoutScreen(workouts: List<WorkoutModel>) {
     val showHistory by viewModel.showHistory.observeAsState()
     val editWorkout by viewModel.editWorkout.observeAsState()
 
+    val search = remember {
+        mutableStateOf("")
+    }
+    var searchVisible = remember {
+        mutableStateOf(false)
+    }
+
+    Search(searchVisible, search, "Search by Name")
     Screen {
         when {
             showHistory != null -> ShowHistory(workouts = viewModel.getHistory(showHistory!!))
@@ -71,7 +80,7 @@ fun WorkoutScreen(workouts: List<WorkoutModel>) {
                 val workout = viewModel.getWorkoutById(editWorkout!!)
                 if (workout != null) { EditWorkout(workout = workout) } }
             else ->
-                ShowWorkouts(viewModel.sortWorkoutsAlphabetically(workouts))
+                ShowWorkouts(viewModel.sort(workouts, sort, search.value))
         }
     }
 }

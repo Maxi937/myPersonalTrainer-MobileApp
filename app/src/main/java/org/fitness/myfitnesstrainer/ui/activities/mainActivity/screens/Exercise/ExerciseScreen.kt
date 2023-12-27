@@ -50,6 +50,7 @@ import org.fitness.myfitnesstrainer.ui.composables.Exercise.ExerciseItem
 import org.fitness.myfitnesstrainer.ui.composables.MyFitnessInputFields.MyFitnessTextInput
 import org.fitness.myfitnesstrainer.ui.composables.MyFitnessInputFields.filterMaxChars
 import org.fitness.myfitnesstrainer.ui.composables.Screen.Screen
+import org.fitness.myfitnesstrainer.ui.composables.Search.Search
 import org.fitness.myfitnesstrainer.ui.preview.ProfilePreviewParameterProvider
 import org.fitness.myfitnesstrainer.ui.theme.MyFitnessTrainerTheme
 
@@ -57,54 +58,17 @@ import org.fitness.myfitnesstrainer.ui.theme.MyFitnessTrainerTheme
 fun ExerciseScreen(exercises: List<ExerciseModel>) {
     val viewModel: ExerciseViewModel = viewModel()
     val sort by remember { mutableStateOf(false) }
+
     val search = remember {
         mutableStateOf("")
     }
-    var searchVisible by remember {
+    var searchVisible = remember {
         mutableStateOf(false)
     }
 
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .zIndex(100f)
-            .padding(5.dp)
-    ) {
+    Search(searchVisible, search, "Search by Body Part")
 
-        AnimatedVisibility(visible = searchVisible) {
-            TextField(
-                value = search.value,
-                onValueChange = { search.value = filterMaxChars(10, it) },
-                placeholder = { Text(text = "Search Body Part", color = Color.Gray) },
-                modifier = Modifier.width(220.dp),
-                singleLine = true,
-                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text)
-            )
-        }
-
-        Row(horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()) {
-            FloatingActionButton(
-                onClick = {
-                    search.value = ""
-                    searchVisible = !searchVisible
-                },
-                containerColor = MaterialTheme.colorScheme.tertiaryContainer
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.Search,
-                    contentDescription = "Localized description",
-                    tint = MaterialTheme.colorScheme.inversePrimary
-                )
-
-            }
-
-        }
-
-    }
-
-
-
-    Screen {
+    Screen(modifier = Modifier.padding(0.dp, 20.dp)) {
         for (exercise in viewModel.sort(exercises, sort, search.value)) {
             key(exercise._id) {
                 SwipeToDeleteExercise(exercise = exercise, onDelete = {
