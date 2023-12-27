@@ -96,6 +96,8 @@ fun ActiveSets(exercise: ExerciseModel) {
         var weight = remember { mutableStateOf("") }
         var isChecked by remember { mutableStateOf(false) }
 
+
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -135,6 +137,7 @@ fun ActiveSets(exercise: ExerciseModel) {
         }
     }
     Control(text = "Add Set") {
+        exercise.addDefaultSet()
         sets += 1
     }
 }

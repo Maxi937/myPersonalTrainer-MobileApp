@@ -19,21 +19,34 @@ class WorkoutViewModel() : ViewModel() {
     val showHistory: MutableLiveData<String> by lazy {
         MutableLiveData<String>()
     }
+
+    val editWorkout: MutableLiveData<String> by lazy {
+        MutableLiveData<String>()
+    }
+
     fun startWorkout(context: Context, workout: WorkoutModel) {
         val intent = Intent(context, WorkoutActivity::class.java)
         intent.putExtra("workout", workout)
         context.startActivity(intent)
     }
 
+    fun updateWorkout(workout: WorkoutModel) {
+        workout._id?.let { MyFitnessRepository.updateWorkout(it, workout) }
+    }
+
+    fun getWorkoutById(workoutId: String): WorkoutModel? {
+        return myFitnessRepository.getWorkoutById(workoutId)
+    }
+
     fun editWorkout(workout: WorkoutModel) {
-      Timber.i("Edit Workout")
+        Timber.i("Edit Workout")
     }
 
     fun deleteWorkout(workout: WorkoutModel) {
         myFitnessRepository.deleteWorkout(workout)
     }
 
-    fun getHistory(workoutId: String) : List<WorkoutModel> {
+    fun getHistory(workoutId: String): List<WorkoutModel> {
         return myFitnessRepository.getWorkoutHistory(workoutId)
     }
 }

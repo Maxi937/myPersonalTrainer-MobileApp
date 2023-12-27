@@ -10,14 +10,19 @@ data class ExerciseModel(
     val __v: Int? = null,
     val _id: String? = null,
     val bodyPart: String,
-    val sets: MutableList<List<Float>> = mutableListOf(),
+    var sets: MutableList<List<Float>> = mutableListOf(),
     val createdAt: String? = null,
     val description: String,
     val name: String,
+    val meta: ExerciseMeta? = ExerciseMeta(),
     val updatedAt: String? = null
 ) : Parcelable {
     fun addSet(set: List<Float>) {
         this.sets.add(set)
+    }
+
+    fun addDefaultSet() {
+        this.sets.add(listOf(50F,50F,50F,50F))
     }
 
     fun removeSet(set: List<Float>) {

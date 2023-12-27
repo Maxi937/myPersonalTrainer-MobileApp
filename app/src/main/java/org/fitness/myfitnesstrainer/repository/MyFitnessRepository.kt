@@ -55,6 +55,27 @@ object MyFitnessRepository {
         }
     }
 
+    fun getWorkoutById(workoutId: String): WorkoutModel? {
+        when (val p = profile.value) {
+            is ResourceStatus.IsSuccess -> {
+                val w = p.data.workouts.find { it._id == workoutId }
+                if (w != null) {
+                    return w
+                }
+            }
+
+            else -> return null
+        }
+        return null
+    }
+
+    fun updateWorkout(workoutId: String, newWorkoutModel: WorkoutModel) {
+        scope.launch {
+            MyFitnessClient.service.updateWorkout(workoutId, newWorkoutModel)
+        }
+    }
+
+
     fun getWorkoutHistory(workoutId: String): List<WorkoutModel> {
         when (val p = profile.value) {
             is ResourceStatus.IsSuccess -> {
@@ -63,9 +84,14 @@ object MyFitnessRepository {
                 if (w != null) {
                     result.add(w)
                     for (h in w.history) {
-                        var workout = WorkoutModel(name = w.name, exercises = h.exercises, createdAt = h.createdAt, history = listOf(
-                            History(createdAt = h.createdAt)
-                        ))
+                        var workout = WorkoutModel(
+                            name = w.name,
+                            exercises = h.exercises,
+                            createdAt = h.createdAt,
+                            history = listOf(
+                                History(createdAt = h.createdAt)
+                            )
+                        )
                         result.add(workout)
                     }
                 }
@@ -184,6 +210,7 @@ object MyFitnessRepository {
 
     fun completeWorkout(workout: WorkoutModel, exercisesCompleted: List<ExerciseModel>) {
         scope.launch {
+            workout._id?.let { updateWorkout(workoutId = it, workout.copy(exercises = exercisesCompleted)) }
             completeProfileWorkout(workout, exercisesCompleted)
             MyFitnessClient.service.addHistory(workout._id!!, exercisesCompleted)
         }

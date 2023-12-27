@@ -101,7 +101,6 @@ class AuthManager(activity: Activity) {
                         addTokenToClient(authtoken)
                         loggedInAccountName = bnd!!.getString(AccountManager.KEY_ACCOUNT_NAME)
                         loggedIn.postValue(true)
-                        showMessage("getTokenForAccountCreateIfNeeded -> Got Auth Token: $authtoken")
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()

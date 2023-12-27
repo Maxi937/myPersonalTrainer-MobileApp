@@ -18,10 +18,6 @@ class Resource<T : Any>(nothing: Nothing?) : MutableLiveData<ResourceStatus<T>>(
         postValue(ResourceStatus.IsError(code=code, errorMsg=errorMsg))
     }
 
-    override fun postValue(value: ResourceStatus<T>?) {
-        super.postValue(value)
-    }
-
     fun isSuccess(data: T) {
         postValue(ResourceStatus.IsSuccess(data))
     }
@@ -36,5 +32,9 @@ class Resource<T : Any>(nothing: Nothing?) : MutableLiveData<ResourceStatus<T>>(
 
     fun isException(e: Throwable) {
         postValue(ResourceStatus.IsException(e))
+    }
+
+    override fun postValue(value: ResourceStatus<T>?) {
+        super.postValue(value)
     }
 }

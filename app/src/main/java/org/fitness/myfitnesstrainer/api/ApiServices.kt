@@ -29,6 +29,9 @@ interface ApiServices {
     @POST("/api/workouts")
     suspend fun addWorkout(@Body workout: WorkoutModel): Response<ApiAddWorkoutResponse>
 
+    @POST("/api/workouts/{id}")
+    suspend fun updateWorkout(@Path("id") workoutId: String, @Body workout: WorkoutModel): Response<ApiAddWorkoutResponse>
+
     @POST("/api/exercises")
     suspend fun addExercise(@Body exercise: ExerciseModel): Response<ApiAddExerciseResponse>
 

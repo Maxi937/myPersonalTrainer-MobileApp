@@ -16,6 +16,8 @@ interface MyFitnessService {
 
     suspend fun addWorkout(workoutModel: WorkoutModel): NetworkResult<ApiAddWorkoutResponse>
 
+    suspend fun updateWorkout(workoutId: String, workoutModel: WorkoutModel): NetworkResult<ApiAddWorkoutResponse>
+
     suspend fun authenticate(authRequest: AuthRequest): NetworkResult<Token>
 
     suspend fun signup(signupRequest: SignupRequest): NetworkResult<Token>
@@ -33,6 +35,8 @@ class MyFitnessServiceImp(private val apiServices: ApiServices) : MyFitnessServi
     override suspend fun getProfile(): NetworkResult<apiProfile> = handleApi { apiServices.getProfile() }
 
     override suspend fun addWorkout(workoutModel: WorkoutModel): NetworkResult<ApiAddWorkoutResponse> = handleApi { apiServices.addWorkout(workoutModel) }
+
+    override suspend fun updateWorkout(workoutId: String, workoutModel: WorkoutModel): NetworkResult<ApiAddWorkoutResponse> = handleApi { apiServices.updateWorkout(workoutId, workoutModel) }
 
     override suspend fun authenticate(authRequest: AuthRequest): NetworkResult<Token> = handleApi { apiServices.authenticate(authRequest) }
 
