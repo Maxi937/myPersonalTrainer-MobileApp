@@ -112,7 +112,7 @@ object MyFitnessRepository {
     fun deleteExercise(exercise: ExerciseModel) {
         scope.launch {
             deleteProfileExercise(exercise._id!!)
-            MyFitnessClient.service.deleteExercise(exercise._id)
+            MyFitnessClient.service.deleteExercise(exercise)
         }
     }
 

@@ -26,7 +26,7 @@ interface MyFitnessService {
 
     suspend fun deleteWorkout(workoutModel: WorkoutModel): NetworkResult<apiStatus>
 
-    suspend fun deleteExercise(exerciseId: String): NetworkResult<apiStatus>
+    suspend fun deleteExercise(exerciseModel: ExerciseModel): NetworkResult<apiStatus>
 
     suspend fun addHistory(workoutId: String, exercises: List<ExerciseModel>): NetworkResult<ApiAddWorkoutResponse>
 }
@@ -46,7 +46,7 @@ class MyFitnessServiceImp(private val apiServices: ApiServices) : MyFitnessServi
 
     override suspend fun deleteWorkout(workoutModel: WorkoutModel): NetworkResult<apiStatus> = handleApi { apiServices.deleteWorkout(workoutModel) }
 
-    override suspend fun deleteExercise(exerciseId: String): NetworkResult<apiStatus> = handleApi { apiServices.deleteExercise(exerciseId) }
+    override suspend fun deleteExercise(exerciseModel: ExerciseModel): NetworkResult<apiStatus> = handleApi { apiServices.deleteExercise(exerciseModel) }
 
     override suspend fun addHistory(workoutId: String, exercises: List<ExerciseModel>): NetworkResult<ApiAddWorkoutResponse> = handleApi { apiServices.addHistory(workoutId, exercises) }
 }

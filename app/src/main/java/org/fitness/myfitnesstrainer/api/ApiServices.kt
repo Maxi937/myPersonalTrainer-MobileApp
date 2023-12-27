@@ -39,7 +39,7 @@ interface ApiServices {
     suspend fun deleteWorkout(@Body workout: WorkoutModel): Response<apiStatus>
 
     @POST("/api/exercises/delete")
-    suspend fun deleteExercise(@Body exerciseId: String): Response<apiStatus>
+    suspend fun deleteExercise(@Body exercise: ExerciseModel): Response<apiStatus>
 
     @POST("/api/workouts/history/{id}")
     suspend fun addHistory(@Path("id") workoutId: String, @Body exercises: List<ExerciseModel>): Response<ApiAddWorkoutResponse>
