@@ -24,7 +24,7 @@ interface ApiServices {
     suspend fun getProfile(): Response<apiProfile>
 
     @POST("/api/users")
-    suspend fun signup(@Body signupRequest: SignupRequest): Response<apiStatus>
+    suspend fun signup(@Body signupRequest: SignupRequest): Response<Token>
 
     @POST("/api/workouts")
     suspend fun addWorkout(@Body workout: WorkoutModel): Response<ApiAddWorkoutResponse>

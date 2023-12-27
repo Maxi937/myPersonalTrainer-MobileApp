@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -24,6 +26,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -34,14 +37,16 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import org.fitness.myfitnesstrainer.R
 import org.fitness.myfitnesstrainer.ui.composables.ButtonWithSpinner.ButtonWithSpinner
+import timber.log.Timber
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
-    onSubmit: (email: String, password: String) -> Unit,
-    modifier: Modifier = Modifier.fillMaxSize()
+    modifier: Modifier = Modifier.fillMaxSize(),
+    onSignUp: () -> Unit,
+    onSubmit: (email: String, password: String) -> Unit
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -104,9 +109,9 @@ fun LoginScreen(
 
         Column(verticalArrangement = Arrangement.Bottom, modifier = Modifier.fillMaxSize()) {
             Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
-//                Button(onClick = { viewModel.login(email, password) },  colors = ButtonDefaults.buttonColors(Color.Transparent)) {
-//                    Text(text = "Sign Up")
-//                }
+                Button(onClick = { onSignUp() }, colors = ButtonDefaults.buttonColors(Color.Transparent)) {
+                    Text(text = "Sign Up")
+                }
             }
         }
     }

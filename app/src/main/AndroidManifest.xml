@@ -36,7 +36,8 @@
             android:resource="@xml/account_authenticator" />
         </service>
 
-        <activity android:name=".auth.AuthenticatorActivity" android:label="My Fitness Trainer" android:theme="@style/Theme.SplashScreen.MySplash"/>
+        <activity android:name=".auth.SignUpActivity" android:label="My Fitness Trainer" android:theme="@style/AppTheme.NoActionBar" android:exported="true"/>
+        <activity android:name=".auth.AuthenticatorActivity" android:label="My Fitness Trainer" android:theme="@style/AppTheme.NoActionBar" android:exported="true"/>
         <activity android:name=".ui.activities.workoutActivity.WorkoutActivity" android:label="My Fitness Trainer" android:theme="@style/AppTheme.NoActionBar" android:exported="true"/>
 
         <activity

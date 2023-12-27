@@ -86,8 +86,9 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
-    // Fragments
+    // Fragments / Activity
     implementation("androidx.fragment:fragment-ktx:1.6.1")
+    implementation("androidx.activity:activity-ktx:1.8.2")
 
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")

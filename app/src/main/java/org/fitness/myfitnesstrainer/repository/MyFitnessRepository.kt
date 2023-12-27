@@ -47,15 +47,17 @@ object MyFitnessRepository {
         }
     }
 
+    fun getWorkouts(): List<WorkoutModel> {
+        when (val p = profile.value) {
+            is ResourceStatus.IsSuccess -> return p.data.workouts
+            else -> return emptyList()
+        }
+    }
+
     fun getExercises(): List<ExerciseModel> {
         when (val p = profile.value) {
-            is ResourceStatus.IsSuccess -> {
-                return p.data.exercises
-            }
-            // Show message something went wrong or save deletion to another var and run it on reconnect not sure yet
-            else -> {
-                return emptyList()
-            }
+            is ResourceStatus.IsSuccess -> return p.data.exercises
+            else -> return emptyList()
         }
     }
 
@@ -165,7 +167,10 @@ object MyFitnessRepository {
         }
     }
 
-    private fun completeProfileWorkout(workout: WorkoutModel, exercisesCompleted: List<ExerciseModel>) {
+    private fun completeProfileWorkout(
+        workout: WorkoutModel,
+        exercisesCompleted: List<ExerciseModel>
+    ) {
         val date = SimpleDateFormat("dd-MMM-YY").format(Date())
         val thistory: History = History(exercisesCompleted, date.toString())
 

@@ -29,6 +29,7 @@ class WorkoutActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        myFitnessRepository = MyFitnessRepository
         workout = intent.extras?.getParcelable("workout", WorkoutModel::class.java)!!
     }
 

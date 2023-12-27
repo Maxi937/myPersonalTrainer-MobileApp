@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import org.fitness.myfitnesstrainer.data.local.models.Profile
 import org.fitness.myfitnesstrainer.ui.composables.Screen.Screen
 import org.fitness.myfitnesstrainer.ui.composables.MyFitnessText.MyFitnessSubscript1
@@ -24,6 +25,8 @@ import org.fitness.myfitnesstrainer.ui.theme.MyFitnessTrainerTheme
 
 @Composable
 fun ProfileScreen(profile: Profile) {
+    val viewModel: ProfileViewModel = viewModel()
+
     Screen {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(
@@ -34,7 +37,7 @@ fun ProfileScreen(profile: Profile) {
             Column {
                 Text(text = profile.userDetails.fname)
                 Spacer(modifier = Modifier.size(3.dp))
-                MyFitnessSubscript1(text = "${profile.workouts.size.toString()} Workouts")
+                MyFitnessSubscript1(text = "${viewModel.getNumberOfWorkoutsCompletedThisWeek()}")
             }
         }
     }

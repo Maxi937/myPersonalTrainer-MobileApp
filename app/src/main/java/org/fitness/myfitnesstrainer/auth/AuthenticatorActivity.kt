@@ -7,26 +7,42 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.compose.setContent
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material3.Surface
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
 import org.fitness.myfitnesstrainer.ui.theme.MyFitnessTrainerTheme
 import timber.log.Timber
 
 // AuthenticatorActivity depreciated - had to add the code from it to this app compat to make sure the response was being received from the caller
-class AuthenticatorActivity : AppCompatActivity() {
+open class AuthenticatorActivity : AppCompatActivity() {
     private var mAccountManager: AccountManager? = null
     private var mAuthTokenType: String? = null
     private var mResultBundle: Bundle? = null
     private var mAccountAuthenticatorResponse: AccountAuthenticatorResponse? = null
+    private val REQ_SIGNUP = 1
+    lateinit var resultLauncher: ActivityResultLauncher<Intent>
+    lateinit var signupintent: Intent
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Timber.i("Auth Activity Started")
         super.onCreate(savedInstanceState)
-        installSplashScreen()
+
+        signupintent = Intent(baseContext, SignUpActivity::class.java)
+
+        resultLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                Timber.i("Finished: ${result.data}")
+                if (result.resultCode == RESULT_OK) {
+                    if (result.data != null) {
+                        finishLogin(result.data!!)
+                    }
+                }
+            }
 
         mAccountAuthenticatorResponse = intent.getParcelableExtra(
             AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE,
@@ -41,7 +57,7 @@ class AuthenticatorActivity : AppCompatActivity() {
         setContent {
             MyFitnessTrainerTheme {
                 Surface {
-                    LoginScreen({ email, password ->
+                    LoginScreen(onSignUp = { startSignUpActivity() }) { email, password ->
                         lifecycleScope.async {
                             val intent = submit(email, password)
                             if (intent.hasExtra("KEY_ERROR_MESSAGE")) {
@@ -54,18 +70,16 @@ class AuthenticatorActivity : AppCompatActivity() {
                                 finishLogin(intent);
                             }
                         }
-                    })
+                    }
                 }
             }
         }
     }
 
-//    protected fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
-//        // The sign up activity returned that the user has successfully created an account
-//        if (requestCode == REQ_SIGNUP && resultCode == RESULT_OK) {
-//            finishLogin(data)
-//        } else super.onActivityResult(requestCode, resultCode, data)
-//    }
+    private fun startSignUpActivity() {
+        signupintent.putExtras(intent.extras!!)
+        resultLauncher.launch(signupintent)
+    }
 
 
     private fun setAccountAuthenticatorResult(result: Bundle) {
@@ -116,7 +130,6 @@ class AuthenticatorActivity : AppCompatActivity() {
 
     override fun finish() {
         if (mAccountAuthenticatorResponse != null) {
-            // send the result bundle back if set, otherwise send an error.
             if (mResultBundle != null) {
                 mAccountAuthenticatorResponse!!.onResult(mResultBundle)
             } else {
