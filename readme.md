@@ -56,6 +56,6 @@ Password: secret
 
 
 ## **Known Issues**
-- Backend can flub giving a date back to the app for the last performed date, some sort of dependency issue with moment.js - date is being saved correctly on db.
+- Backend can flub giving a date back to the app for the last peraformed date, some sort of dependency issue with moment.js - date is being saved correctly on db.
 - The Server is hosted on render.com and starts cold so first login will probably fail unless a request has already been made to the server, should be fine afterward - sometimes the login page will open twice.
 - sets are defaulted to a fixed amount and dont update yet.
