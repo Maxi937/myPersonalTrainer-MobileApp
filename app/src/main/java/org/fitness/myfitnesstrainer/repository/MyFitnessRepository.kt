@@ -44,6 +44,7 @@ object MyFitnessRepository {
 
                 is NetworkResult.Error -> profile.isError(code = response.code, response.errorMsg)
                 is NetworkResult.Exception -> profile.isException(response.e)
+                else -> {}
             }
         }
     }
@@ -220,7 +221,7 @@ object MyFitnessRepository {
         workout: WorkoutModel, exercisesCompleted: List<ExerciseModel>
     ) {
         val date = SimpleDateFormat("dd-MMM-YY").format(Date())
-        val thistory: History = History(exercisesCompleted, date.toString())
+        val thistory = History(exercisesCompleted, date.toString())
 
         when (val p = profile.value) {
             is ResourceStatus.IsSuccess -> {

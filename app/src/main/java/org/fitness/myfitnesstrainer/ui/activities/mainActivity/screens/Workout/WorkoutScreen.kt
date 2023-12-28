@@ -108,6 +108,7 @@ fun ShowHistory(workouts: List<WorkoutModel>) {
     }
     for (workout in workouts.drop(1)) {
         Workout(workout = workout, showMenuActions = false)
+        Spacer(Modifier.size(10.dp))
     }
 }
 
@@ -148,7 +149,7 @@ fun EditWorkout(workout: WorkoutModel) {
                         )
                     }
                     IconButton(onClick = {
-                        exercise.sets.add(emptyList())
+                        exercise.sets.add(listOf(50F, 50F, 50F))
                         numberOfSets += 1
                     }) {
                         Icon(
@@ -156,13 +157,10 @@ fun EditWorkout(workout: WorkoutModel) {
                             contentDescription = "Localized description"
                         )
                     }
-
                 }
-
             }
         }
     }
-
 }
 
 
@@ -182,7 +180,6 @@ fun Workout(workout: WorkoutModel, showMenuActions: Boolean = true) {
                 }
 
             }
-
         }
         Exercises(workout.exercises)
     }
