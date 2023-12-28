@@ -32,18 +32,18 @@ fun BottomNavRoutes(navController: NavHostController, padding: PaddingValues, pr
         }
         composable("addWorkout") {
             AddWorkoutScreen() {
-                navController.navigate(BottomNavItem.Workout.route)
+                navController.popBackStack()
             }
         }
         composable("addExercise") {
             AddExerciseScreen() {
-                navController.navigate(BottomNavItem.Exercise.route)
+                navController.popBackStack()
             }
         }
-        composable("showHistory/{workoutId}") {
-            AddExerciseScreen() {
-                navController.navigate(BottomNavItem.Exercise.route)
-            }
-        }
+//        composable("showHistory/{workoutId}") {
+//            AddExerciseScreen() {
+//                navController.popBackStack()
+//            }
+//        }
     }
 }

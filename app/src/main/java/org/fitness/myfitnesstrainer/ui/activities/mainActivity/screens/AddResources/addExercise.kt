@@ -76,14 +76,13 @@ fun AddExerciseScreen(doneCallback: () -> Unit) {
         bottomContent = {
             MyFitnessPrimaryButton(text = "Add Exercise", modifier = Modifier.fillMaxWidth()) {
                 if (name.value.isNotEmpty() && description.value.isNotEmpty() && selectedBodyPart.value.isNotEmpty()) {
-                    Timber.i("Form Okay")
                     myFitnessRepository.createExercise(
                         name.value,
                         description.value,
                         selectedBodyPart.value
                     )
+                    doneCallback()
                 } else {
-                    Timber.i("Form Err")
                     isError = true
                 }
             }
