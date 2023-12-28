@@ -1,6 +1,7 @@
 package org.fitness.myfitnesstrainer.ui.activities.workoutActivity.screens.activeWorkout
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -27,6 +28,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -44,6 +46,11 @@ import org.fitness.myfitnesstrainer.ui.composables.Screen.Screen
 @Composable
 fun ActiveWorkout(workout: WorkoutModel, navigation: (newWorkout: WorkoutModel) -> Unit) {
     val viewModel: ActiveWorkoutViewModel = viewModel()
+    var cancel by remember { mutableStateOf(false)}
+
+    if(cancel) {
+        Cancel()
+    }
 
     Scaffold(topBar = { WorkoutActivityTopBar {
         val newWorkout = viewModel.getCompletedWorkout(workout)
@@ -55,15 +62,17 @@ fun ActiveWorkout(workout: WorkoutModel, navigation: (newWorkout: WorkoutModel) 
                 MyFitnessH2(e.name)
                 ExerciseTable(e)
             }
-            Control(text = "Add Exercise") {
-//            viewModel.addExercise()
-            }
             Control(text = "Cancel Workout") {
-//            viewModel.cancel()
+                cancel = true
             }
-
         }
     }
+}
+
+@Composable
+fun Cancel() {
+    val activity = LocalContext.current as Activity
+    activity?.finish()
 }
 
 @Composable
