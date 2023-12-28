@@ -18,13 +18,8 @@ class addResourcesViewModel : ViewModel() {
         return e != null
     }
 
-    fun getExercises(search: String?): List<ExerciseModel> {
-        val exercises = MyFitnessRepository.getExercises()
-        return if (search != null) {
-            searchExercises(exercises, search)
-        } else {
-            exercises
-        }
+    fun getExercises(): List<ExerciseModel> {
+        return MyFitnessRepository.getExercises()
     }
 
 

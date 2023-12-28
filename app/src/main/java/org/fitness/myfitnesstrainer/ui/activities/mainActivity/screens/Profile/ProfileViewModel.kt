@@ -65,6 +65,9 @@ class ProfileViewModel : ViewModel() {
         if (counted == 1) {
             return Pair("Performed $counted Time", result)
         }
+        else if (counted == 0) {
+            return Pair("Performed $counted Times", null)
+        }
         else {
             return return Pair("Performed $counted Times", result)
         }

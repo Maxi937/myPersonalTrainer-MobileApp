@@ -70,7 +70,7 @@ fun Search(
                 },
                 onValueChange = { search.value = filterMaxChars(10, it) },
                 placeholder = { Text(text = searchBoxText, color = Color.Gray) },
-                modifier = Modifier.width(220.dp),
+                modifier = Modifier.width(260.dp),
                 singleLine = true,
                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text)
             )

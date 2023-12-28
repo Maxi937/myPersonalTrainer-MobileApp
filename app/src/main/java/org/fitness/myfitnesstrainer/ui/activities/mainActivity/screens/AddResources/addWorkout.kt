@@ -47,21 +47,10 @@ import timber.log.Timber
 @Composable
 fun AddWorkoutScreen(doneCallback: () -> Unit) {
     val viewModel: addResourcesViewModel = viewModel()
-
-
-    val search = remember {
-        mutableStateOf("")
-    }
-    var searchVisible = remember {
-        mutableStateOf(false)
-    }
-
-    val exercises = viewModel.getExercises(search.value)
-    Search(searchVisible, search, "Search Body Part")
+    val exercises = viewModel.getExercises()
 
     var isError by remember { mutableStateOf(false) }
     val name = remember { mutableStateOf("") }
-    val selectedExercises = remember { mutableStateOf(viewModel.selectedExercises) }
 
     Column(
         modifier = Modifier
@@ -85,7 +74,7 @@ fun AddWorkoutScreen(doneCallback: () -> Unit) {
                     .verticalScroll(rememberScrollState())
                     .background(MaterialTheme.colorScheme.primaryContainer)
             ) {
-                SelectExerciseList(exercises, search.value)
+                SelectExerciseList(exercises)
             }
         }
     )
@@ -95,7 +84,7 @@ fun AddWorkoutScreen(doneCallback: () -> Unit) {
             .padding(10.dp), Arrangement.Bottom
     ) {
         MyFitnessPrimaryButton(text = "Done", modifier = Modifier.fillMaxWidth()) {
-            if (name.value.isNotEmpty() && selectedExercises.value.isNotEmpty()) {
+            if (name.value.isNotEmpty() && viewModel.selectedExercises.isNotEmpty()) {
                 viewModel.createWorkout(name.value)
                 doneCallback()
             } else {
@@ -115,16 +104,11 @@ fun AddWorkoutScreen(doneCallback: () -> Unit) {
 }
 
 @Composable
-fun SelectExerciseList(exercises: List<ExerciseModel>, search: String) {
+fun SelectExerciseList(exercises: List<ExerciseModel>) {
     val viewModel: addResourcesViewModel = viewModel()
 
     for (exercise in exercises) {
-        var isChecked by remember { mutableStateOf(viewModel.getChecked(exercise)) }
-
-        if(search.isNotEmpty()) {
-            isChecked = viewModel.getChecked(exercise)
-        }
-
+        var isChecked by remember { mutableStateOf(false) }
 
 
         ExerciseItem(exercise = exercise, padding = PaddingValues(0.dp, 10.dp)) {

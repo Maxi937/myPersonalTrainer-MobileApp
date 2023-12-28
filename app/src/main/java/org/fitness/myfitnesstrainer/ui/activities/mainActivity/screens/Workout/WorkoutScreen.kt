@@ -73,7 +73,7 @@ fun WorkoutScreen(workouts: List<WorkoutModel>) {
         mutableStateOf(false)
     }
 
-    Search(searchVisible, search)
+    Search(searchVisible, search, "Search Workout Name")
     Screen {
         when {
             showHistory != null -> ShowHistory(workouts = viewModel.getHistory(showHistory!!))
@@ -118,6 +118,7 @@ fun EditWorkout(workout: WorkoutModel) {
     Workout(workout = workout, showMenuActions = false)
     Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
         IconButton(onClick = {
+            Timber.i("Sending: ${workout.exercises}")
             viewModel.updateWorkout(workout)
             viewModel.editWorkout.postValue(null)
         }) {
