@@ -107,7 +107,7 @@ fun ShowHistory(workouts: List<WorkoutModel>) {
         }
     }
     for (workout in workouts.drop(1)) {
-        Workout(workout = workout, showMenuActions = false)
+        History(workout = workout)
         Spacer(Modifier.size(10.dp))
     }
 }
@@ -164,6 +164,17 @@ fun EditWorkout(workout: WorkoutModel) {
     }
 }
 
+@Composable
+fun History(workout: WorkoutModel) {
+    MyFitnessCard(onClick = { }) {
+        Row {
+            MyFitnessH3Subscript1(
+                title = workout.name.capitalize(), text = checkHistoryForLatest(workout.history)
+            )
+        }
+        Exercises(workout.exercises)
+    }
+}
 
 @Composable
 fun Workout(workout: WorkoutModel, showMenuActions: Boolean = true) {

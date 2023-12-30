@@ -53,7 +53,7 @@ object MyFitnessClient {
 
     private val api: ApiServices by lazy {
         Retrofit.Builder()
-            .baseUrl("https://myfitnesstrainer-backend.onrender.com")
+            .baseUrl("http://localhost:4000")
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
