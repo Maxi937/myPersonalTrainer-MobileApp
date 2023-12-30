@@ -76,14 +76,15 @@ fun Search(
             )
         }
 
-        Row(horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth().offset { IntOffset(offsetX.roundToInt(), offsetY.roundToInt()) }.pointerInput(Unit) {
-            detectDragGestures { change, dragAmount ->
-                change.consume()
-                offsetX += dragAmount.x
-                offsetY += dragAmount.y
-            }
-        }) {
+        Row(horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()) {
             FloatingActionButton(
+                modifier = Modifier.offset { IntOffset(offsetX.roundToInt(), offsetY.roundToInt()) }.pointerInput(Unit) {
+                detectDragGestures { change, dragAmount ->
+                    change.consume()
+                    offsetX += dragAmount.x
+                    offsetY += dragAmount.y
+                }
+            },
                 onClick = {
                     searchVisible.value = !searchVisible.value
                 },
